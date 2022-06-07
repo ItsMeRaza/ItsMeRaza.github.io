@@ -30,7 +30,7 @@
                 <div class="mdui-card-media-covered mdui-card-media-covered-gradient">
                     <div class="mdui-card-primary" style="text-align: center;">
                         <div class="mdui-card-primary-title">FDP Client</div>
-                        <div class="mdui-card-primary-subtitle">Latest EAP auto build<br/>Download as your own risk, it may unstable and buggy!</div>
+                        <div class="mdui-card-primary-subtitle">Latest github actions<br/>Downloads may contain bugs as they are pre release</div>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
             }).sort(function(a, b) {
                 return -1 // this is a really stupid method right?
             }).forEach(element => {
-                $("#tbody").append('<tr><td><a href="' + element.link + '">' + element.sha.substring(0, 7) + '</a></td><td>' + element.branch + '</td><td>' + element.time.toLocaleString() + '</td><td>' + element.msg + '</td><td><a href="' + element.download_link + '">Artifact</a></td></tr>')
+                $("#tbody").append('<tr><td><a href="' + element.link + '">' + element.sha.substring(0, 7) + '</a></td><td>' + element.branch + '</td><td>' + element.time.toLocaleString() + '</td><td>' + element.msg + '</td><td><a href="' + element.download_link + '">Download</a></td></tr>')
             })
         }
 
