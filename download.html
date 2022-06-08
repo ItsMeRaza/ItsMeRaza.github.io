@@ -45,10 +45,14 @@
         <div class="mdui-container">
             <table class="mdui-table mdui-hoverable">
                 <style>
-                <table style="border-collapse: collapse;">
-                 table, th, td {
-                 <tr style="border-bottom: 1px solid black;">
-                 }
+                table {
+                border-collapse: collapse;
+                width: 100%;
+                }
+
+                tr {
+                border-bottom: 1px solid #ddd;
+                }   
                 th, td {
                 padding: 20px;
                 }
@@ -62,6 +66,7 @@
                         <th>Date</th>
                         <th>Change log</th>
                         <th>Downloads</th>
+                       border-bottom: 1px solid #ddd;
                     </tr>
                 </thead>
                 <tbody id="tbody">
