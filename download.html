@@ -106,8 +106,8 @@
                 return a.time.getTime() - b.time.getTime();
             }).sort(function(a, b) {
                 return -1 // this is a really stupid method right?
-            }).forEach(element => {
-                $("#tbody").append('<tr><td><a href="' + element.link + '">' + element.sha.substring(0, 7) + '</a></td><td>' + element.branch + '</td><td>' + element.time.toLocaleString() + '</td><td>' + element.msg + '</td><td><a href="' + element.download_link + '"style="color:#7289da">Download</a></td></tr>')
+            }).forEach(element => {    
+                $("#tbody").append('<tr><td><a href="' + element.link + '"style="color:#FFFFFF">' + element.sha.substring(0, 7) + '</a></td><td>' + element.branch + '</td><td>' + element.time.toLocaleString() + '</td><td>' + element.msg + '</td><td><a href="' + element.download_link + '"style="color:#7289da">Download</a></td></tr>')
             })
         }
 
