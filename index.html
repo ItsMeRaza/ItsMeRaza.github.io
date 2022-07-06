@@ -396,7 +396,7 @@
     <script>
         var version = null
 
-        $.get("https://api.github.com/repos/UnlegitMC/FDPClient", function(data, status) {
+        $.get("https://api.github.com/repos/SkidderMC/FDPClient", function(data, status) {
             $("#stars-info").html(data.stargazers_count)
         });
 
@@ -404,7 +404,7 @@
             $("#users-info").html(data[data.length - 1][1])
         });
 
-        $.get("https://api.github.com/repos/UnlegitMC/FDPClient/contributors", function(data, status) {
+        $.get("https://api.github.com/repos/SkidderMC/FDPClient/contributors", function(data, status) {
             $("#contributors-info").html(data.length)
         });
     </script>
