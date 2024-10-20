@@ -15,7 +15,7 @@
             color: #fff;
             position: relative;
         }
-        
+
         #accessibility-btn {
             position: absolute;
             top: 10px;
@@ -142,7 +142,8 @@
             color: white;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px 12px;
             text-align: left;
             white-space: nowrap;
@@ -227,7 +228,8 @@
     </style>
 </head>
 
-<body class="bg-color-rgb font-family-inter letter-spacing-negative-0-01em text-color-to-gray-50 font-smoothing-antialiased">
+<body
+    class="bg-color-rgb font-family-inter letter-spacing-negative-0-01em text-color-to-gray-50 font-smoothing-antialiased">
     <header>
         FDPClient - A Minecraft Forge Mixin-Based Hacked Client
         <button id="accessibility-btn">
@@ -262,7 +264,8 @@
     <!-- Botões Donate e Download -->
     <div class="buttons-container">
         <a href="https://fdpmc-donations.example.com" class="button">Donate Now!</a>
-        <a href="https://nightly.link/SkidderMC/FDPClient/workflows/build/main/FDPClient.zip" class="button">Download Latest Build</a>
+        <a href="https://nightly.link/SkidderMC/FDPClient/workflows/build/main/FDPClient.zip" class="button">Download
+            Latest Build</a>
     </div>
 
     <main class="mx-auto largura-maxima-72rem padding-left-right-1rem media-padding-horizontal-1-5rem">
@@ -295,7 +298,7 @@
         var releaseJson = [];
 
         // Mostrar/ocultar menu de acessibilidade
-        document.getElementById('accessibility-btn').addEventListener('click', function() {
+        document.getElementById('accessibility-btn').addEventListener('click', function () {
             const menu = document.getElementById('accessibility-menu');
             menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
         });
@@ -310,7 +313,7 @@
         });
 
         // Ajustar largura das seções
-        document.getElementById('section-width').addEventListener('change', function() {
+        document.getElementById('section-width').addEventListener('change', function () {
             const newWidth = this.value;
             document.querySelectorAll('.section').forEach(section => {
                 section.style.width = newWidth;
@@ -318,13 +321,13 @@
         });
 
         // Ajustar alinhamento das seções
-        document.getElementById('alignment').addEventListener('change', function() {
+        document.getElementById('alignment').addEventListener('change', function () {
             const newAlign = this.value;
             document.querySelector('main').style.justifyContent = newAlign;
         });
 
         // Reset para as configurações padrão
-        document.getElementById('reset-defaults').addEventListener('click', function() {
+        document.getElementById('reset-defaults').addEventListener('click', function () {
             // Reseta para largura de 50% e alinhamento central
             document.querySelectorAll('.section').forEach(section => {
                 section.style.width = "48%";
@@ -372,14 +375,16 @@
         function refreshBeta() {
             $('#loading-badge').html("");
             $("#tbody").html("");
-            verJson.sort((a, b) => b.time.getTime() - a.time.getTime()).forEach(element => {
-                $("#tbody").append(`<tr>
-                    <td><a href="${element.link}" style="color:#FFFFFF"> ${element.sha.substring(0, 7)}</a></td>
-                    <td>${element.time.toLocaleString()}</td>
-                    <td><a href="${element.download_link}" style="color:#7289da">Download</a></td>
-                    <td>${element.msg}</td>
-                </tr>`);
-            });
+            verJson.sort((a, b) => b.time.getTime() - a.time.getTime())
+                .slice(0, 30)
+                .forEach(element => {
+                    $("#tbody").append(`<tr>
+            <td><a href="${element.link}" style="color:#FFFFFF"> ${element.sha.substring(0, 7)}</a></td>
+            <td>${element.time.toLocaleString()}</td>
+            <td><a href="${element.download_link}" style="color:#7289da">Download</a></td>
+            <td>${element.msg}</td>
+        </tr>`);
+                });
         }
 
         function refreshReleases() {
@@ -414,8 +419,8 @@
             }
         }
 
-                // Fetch releases from GitHub
-            async function fetchReleases() {
+        // Fetch releases from GitHub
+        async function fetchReleases() {
             const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/releases`);
             const data = await response.json();
 
