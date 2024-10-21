@@ -52,6 +52,11 @@
                     <option value="right">Right</option>
                 </select>
             </div>
+            
+            <!-- Botões para ocultar/exibir seções -->
+            <button id="toggle-beta-section">Toggle Beta Section</button>
+            <button id="toggle-releases-section">Toggle Releases Section</button>
+
             <button id="reset-defaults">Reset to Default</button>
         </div>
     </header>
@@ -90,6 +95,7 @@
 
     <!-- AOS JS -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
     <script>
         AOS.init({
             once: true,
@@ -100,6 +106,7 @@
             easing: 'ease-out-cubic',
         });
     </script>
+    
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
     

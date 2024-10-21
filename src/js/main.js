@@ -291,12 +291,14 @@ document.getElementById('alignment').addEventListener('change', function () {
 
 // Adicionando suporte ao alinhamento dos cabeçalhos "Beta" e "Releases"
 document.addEventListener('DOMContentLoaded', function() {
+  const betaSection = document.getElementById('artifacts-section');
+  const releasesSection = document.getElementById('releases-section');
   const betaHeader = document.getElementById('beta-header');
   const releasesHeader = document.getElementById('releases-header');
 
-  // Função para alterar o alinhamento
+  // Função para alterar o alinhamento dos cabeçalhos
   function changeHeaderAlignment(header, alignment) {
-      switch(alignment) {
+      switch (alignment) {
           case 'left':
               header.style.textAlign = 'left';
               break;
@@ -306,6 +308,15 @@ document.addEventListener('DOMContentLoaded', function() {
           case 'right':
               header.style.textAlign = 'right';
               break;
+      }
+  }
+
+  // Função para alternar a visibilidade das seções
+  function toggleVisibility(section) {
+      if (section.style.display === 'none' || section.style.display === '') {
+          section.style.display = 'block';
+      } else {
+          section.style.display = 'none';
       }
   }
 
@@ -319,6 +330,51 @@ document.addEventListener('DOMContentLoaded', function() {
       const alignment = this.value;
       changeHeaderAlignment(releasesHeader, alignment);
   });
+
+  // Ocultar/exibir a seção "Beta" quando o botão for clicado
+  document.getElementById('toggle-beta-section').addEventListener('click', function() {
+      toggleVisibility(betaSection);
+  });
+
+  // Ocultar/exibir a seção "Releases" quando o botão for clicado
+  document.getElementById('toggle-releases-section').addEventListener('click', function() {
+      toggleVisibility(releasesSection);
+  });
+
+  // Ajustar largura das seções
+  document.getElementById('section-width').addEventListener('change', function() {
+      const newWidth = this.value;
+      document.querySelectorAll('.section').forEach(section => {
+          section.style.width = newWidth;
+      });
+  });
+
+  // Ajustar alinhamento das seções
+  document.getElementById('alignment').addEventListener('change', function() {
+      const newAlign = this.value;
+      document.querySelector('main').style.justifyContent = newAlign;
+  });
+
+  // Reset para as configurações padrão
+  document.getElementById('reset-defaults').addEventListener('click', function() {
+      // Reseta para largura de 50% e alinhamento central
+      document.querySelectorAll('.section').forEach(section => {
+          section.style.width = "48%";
+      });
+      document.querySelector('main').style.justifyContent = "space-between";
+      document.getElementById('section-width').value = "50%";
+      document.getElementById('alignment').value = "center";
+
+      // Reseta o alinhamento dos cabeçalhos "Beta" e "Releases"
+      document.getElementById('beta-alignment').value = "center";
+      document.getElementById('releases-alignment').value = "center";
+      betaHeader.style.textAlign = 'center';
+      releasesHeader.style.textAlign = 'center';
+
+      // Restabelecer a visibilidade das seções "Beta" e "Releases"
+      betaSection.style.display = 'block';
+      releasesSection.style.display = 'block';
+  });
 });
 
 // Reset para as configurações padrão
@@ -331,12 +387,17 @@ document.getElementById('reset-defaults').addEventListener('click', function () 
   document.getElementById('section-width').value = "50%";
   document.getElementById('alignment').value = "center";
 
-  // Resetar alinhamento dos cabeçalhos "Beta" e "Releases"
+  // Reseta o alinhamento dos cabeçalhos "Beta" e "Releases"
   document.getElementById('beta-alignment').value = "center";
   document.getElementById('releases-alignment').value = "center";
   document.getElementById('beta-header').style.textAlign = 'center';
   document.getElementById('releases-header').style.textAlign = 'center';
+
+  // Restabelecer a visibilidade das seções "Beta" e "Releases"
+  document.getElementById('artifacts-section').style.display = 'block';
+  document.getElementById('releases-section').style.display = 'block';
 });
+
 
 async function fetchDownloadCount() {
     let totalDownloads = 0;
