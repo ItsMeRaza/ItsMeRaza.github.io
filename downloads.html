@@ -6,226 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FDPClient</title>
     <link rel="stylesheet" href="src/css/style.css">
-    <style>
-        header {
-            background-color: #3498db;
-            padding: 20px;
-            text-align: center;
-            font-size: 2em;
-            color: #fff;
-            position: relative;
-        }
-
-        #accessibility-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #accessibility-btn i {
-            font-size: 20px;
-        }
-
-        #accessibility-btn:hover {
-            background-color: #45a049;
-            transform: translateY(-2px);
-        }
-
-        /* Menu de acessibilidade */
-        #accessibility-menu {
-            display: none;
-            position: absolute;
-            right: 10px;
-            top: 50px;
-            background-color: #424549;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            width: 200px;
-        }
-
-        #accessibility-menu label {
-            display: block;
-            margin: 5px 0;
-            color: white;
-            font-size: 14px;
-        }
-
-        #accessibility-menu select {
-            width: 100%;
-            padding: 5px;
-            border-radius: 4px;
-            background-color: #fff;
-            color: #000;
-            font-size: 14px;
-        }
-
-        #accessibility-menu button {
-            width: 100%;
-            padding: 8px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-top: 10px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        #accessibility-menu button:hover {
-            background-color: #2980b9;
-        }
-
-        /* Toggle buttons for hiding sections */
-        .toggle-button {
-            background-color: transparent;
-            border: none;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            text-align: left;
-            margin: 5px 0;
-        }
-
-        .toggle-button:after {
-            content: "▼";
-            float: right;
-            font-size: 12px;
-        }
-
-        .toggle-button.collapsed:after {
-            content: "▲";
-        }
-
-        main {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            padding: 20px;
-        }
-
-        .section {
-            background-color: #3a3a3a;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-            max-height: 600px;
-            width: 48%;
-            overflow-y: auto;
-        }
-
-        .section h2 {
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            background-color: #424549;
-            color: white;
-        }
-
-        th,
-        td {
-            padding: 8px 12px;
-            text-align: left;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-
-        th {
-            background-color: #282b30;
-        }
-
-        tr {
-            border-bottom: 1px solid #36393e;
-        }
-
-        .buttons-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .button {
-            display: block;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #2980b9;
-        }
-
-        #download-count {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        /* Ocultar barra de rolagem no webkit */
-        .section::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
-
-        .section {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .release-info {
-            padding: 10px;
-            margin-bottom: 15px;
-            background-color: #4a4a4a;
-            border-radius: 5px;
-        }
-
-        .release-info strong {
-            font-size: 1.2em;
-            color: white;
-        }
-
-        .release-info a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        .release-info a:hover {
-            text-decoration: underline;
-        }
-
-        .release-info span {
-            display: block;
-            margin-top: 5px;
-            color: #ccc;
-        }
-    </style>
+    
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 
 <body
@@ -292,148 +78,26 @@
             <div id="releases-tbody"></div>
         </div>
     </main>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    
+    <!-- Inicializando o AOS -->
     <script>
-        var verJson = [];
-        var releaseJson = [];
-
-        // Mostrar/ocultar menu de acessibilidade
-        document.getElementById('accessibility-btn').addEventListener('click', function () {
-            const menu = document.getElementById('accessibility-menu');
-            menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
+        AOS.init({
+            once: true,
+            disable: 'phone',
+            duration: 1000,
+            easing: 'ease-out-cubic',
         });
-
-        // Toggle sections
-        document.querySelectorAll('.toggle-button').forEach(button => {
-            button.addEventListener('click', function () {
-                const target = document.querySelector(this.dataset.target);
-                target.style.display = target.style.display === 'none' || target.style.display === '' ? 'block' : 'none';
-                this.classList.toggle('collapsed');
-            });
-        });
-
-        // Ajustar largura das seções
-        document.getElementById('section-width').addEventListener('change', function () {
-            const newWidth = this.value;
-            document.querySelectorAll('.section').forEach(section => {
-                section.style.width = newWidth;
-            });
-        });
-
-        // Ajustar alinhamento das seções
-        document.getElementById('alignment').addEventListener('change', function () {
-            const newAlign = this.value;
-            document.querySelector('main').style.justifyContent = newAlign;
-        });
-
-        // Reset para as configurações padrão
-        document.getElementById('reset-defaults').addEventListener('click', function () {
-            // Reseta para largura de 50% e alinhamento central
-            document.querySelectorAll('.section').forEach(section => {
-                section.style.width = "48%";
-            });
-            document.querySelector('main').style.justifyContent = "space-between";
-            document.getElementById('section-width').value = "50%";
-            document.getElementById('alignment').value = "center";
-        });
-
-        async function fetchDownloadCount() {
-            let totalDownloads = 0;
-            const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-            const data = await response.json();
-
-            data.forEach(release => {
-                release.assets.forEach(asset => {
-                    totalDownloads += asset.download_count;
-                });
-            });
-
-            document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
-        }
-
-        function addBetaVer(sha, time, msg, artifact_id) {
-            verJson.push({
-                link: "https://github.com/SkidderMC/FDPClient/commit/" + sha,
-                sha: sha,
-                time: new Date(time),
-                msg: msg,
-                download_link: "https://nightly.link/SkidderMC/FDPClient/actions/runs/" + artifact_id + "/FDPClient.zip"
-            });
-            refreshBeta();
-        }
-
-        function addRelease(tag_name, time, changelog_url, download_count) {
-            releaseJson.push({
-                tag_name: tag_name,
-                time: new Date(time),
-                changelog_link: changelog_url,
-                download_count: download_count
-            });
-            refreshReleases();
-        }
-
-        function refreshBeta() {
-            $('#loading-badge').html("");
-            $("#tbody").html("");
-            verJson.sort((a, b) => b.time.getTime() - a.time.getTime())
-                .slice(0, 30)
-                .forEach(element => {
-                    $("#tbody").append(`<tr>
-            <td><a href="${element.link}" style="color:#FFFFFF"> ${element.sha.substring(0, 7)}</a></td>
-            <td>${element.time.toLocaleString()}</td>
-            <td><a href="${element.download_link}" style="color:#7289da">Download</a></td>
-            <td>${element.msg}</td>
-        </tr>`);
-                });
-        }
-
-        function refreshReleases() {
-            $('#releases-tbody').html("");
-            releaseJson.sort((a, b) => b.time.getTime() - a.time.getTime()).forEach(element => {
-                $("#releases-tbody").append(`
-                    <div class="release-info">
-                        <strong>${element.tag_name}</strong> (${element.time.toLocaleDateString()})<br>
-                        <a href="${element.changelog_link}" target="_blank">View Release</a><br>
-                        <span>Download Count: ${element.download_count}</span>
-                    </div>
-                `);
-            });
-        }
-
-        async function fetchWorkflowRuns() {
-            let page = 1;
-            let hasMorePages = true;
-
-            while (hasMorePages) {
-                const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`);
-                const data = await response.json();
-
-                if (data.workflow_runs.length > 0) {
-                    data.workflow_runs.forEach(element => {
-                        addBetaVer(element.head_commit.id, element.head_commit.timestamp, element.head_commit.message, element.id);
-                    });
-                    page++;
-                } else {
-                    hasMorePages = false;
-                }
-            }
-        }
-
-        // Fetch releases from GitHub
-        async function fetchReleases() {
-            const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/releases`);
-            const data = await response.json();
-
-            data.forEach(release => {
-                let downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
-                addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
-            });
-        }
-
-        fetchDownloadCount();
-        fetchWorkflowRuns();
-        fetchReleases();
     </script>
+
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    
+    <!-- Seus scripts JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="src/js/main.js"></script>
 
 </body>
 
