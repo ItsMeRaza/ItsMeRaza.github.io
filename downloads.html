@@ -14,8 +14,7 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 
-<body
-    class="bg-color-rgb font-family-inter letter-spacing-negative-0-01em text-color-to-gray-50 font-smoothing-antialiased">
+<body class="bg-color-rgb font-family-inter letter-spacing-negative-0-01em text-color-to-gray-50 font-smoothing-antialiased">
     <header>
         FDPClient - A Minecraft Forge Mixin-Based Hacked Client
         <button id="accessibility-btn">
@@ -47,7 +46,6 @@
 
     <div id="download-count">Total Downloads: Waiting...</div>
 
-    <!-- Botões Donate e Download -->
     <div class="buttons-container">
         <a href="https://fdpmc-donations.example.com" class="button">Donate Now!</a>
         <a href="https://nightly.link/SkidderMC/FDPClient/workflows/build/main/FDPClient.zip" class="button">Download
@@ -82,22 +80,24 @@
     <!-- AOS JS -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     
-    <!-- Inicializando o AOS -->
     <script>
         AOS.init({
             once: true,
-            disable: 'phone',
+            disable: function () {
+              return window.innerWidth < 768;
+            },
             duration: 1000,
             easing: 'ease-out-cubic',
         });
     </script>
 
     <!-- Swiper JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
     
     <!-- Seus scripts JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="src/js/main.js"></script>
+     
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="src/js/main.js" defer></script>
 
 </body>
 
