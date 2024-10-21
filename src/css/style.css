@@ -4078,3 +4078,8 @@ tr {
         font-size: 1em;
     }
 }
+
+#beta-header, #releases-header {
+    width: 100%;
+    margin: 0 auto;
+}

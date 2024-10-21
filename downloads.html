@@ -39,6 +39,18 @@
                     <option value="center" selected>Center</option>
                     <option value="flex-end">Right</option>
                 </select>
+                <label for="beta-alignment">Beta Header Alignment</label>
+                <select id="beta-alignment">
+                    <option value="left">Left</option>
+                    <option value="center" selected>Center</option>
+                    <option value="right">Right</option>
+                </select>
+                <label for="releases-alignment">Releases Header Alignment</label>
+                <select id="releases-alignment">
+                    <option value="left">Left</option>
+                    <option value="center" selected>Center</option>
+                    <option value="right">Right</option>
+                </select>
             </div>
             <button id="reset-defaults">Reset to Default</button>
         </div>
@@ -53,7 +65,7 @@
 
     <main class="mx-auto largura-maxima-72rem padding-left-right-1rem media-padding-horizontal-1-5rem">
         <div class="section" id="artifacts-section">
-            <h2>Beta</h2>
+            <h2 id="beta-header">Beta</h2>
             <div class="space" id="loading-badge">
                 <div class="mdui-spinner"></div>
             </div>
@@ -71,14 +83,13 @@
             </table>
         </div>
         <div class="section" id="releases-section">
-            <h2>Releases</h2>
+            <h2 id="releases-header">Releases</h2>
             <div id="releases-tbody"></div>
         </div>
     </main>
 
     <!-- AOS JS -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    
     <script>
         AOS.init({
             once: true,
@@ -89,7 +100,6 @@
             easing: 'ease-out-cubic',
         });
     </script>
-
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
     

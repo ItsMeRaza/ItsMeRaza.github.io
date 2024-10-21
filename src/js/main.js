@@ -289,15 +289,53 @@ document.getElementById('alignment').addEventListener('change', function () {
     document.querySelector('main').style.justifyContent = newAlign;
 });
 
+// Adicionando suporte ao alinhamento dos cabeçalhos "Beta" e "Releases"
+document.addEventListener('DOMContentLoaded', function() {
+  const betaHeader = document.getElementById('beta-header');
+  const releasesHeader = document.getElementById('releases-header');
+
+  // Função para alterar o alinhamento
+  function changeHeaderAlignment(header, alignment) {
+      switch(alignment) {
+          case 'left':
+              header.style.textAlign = 'left';
+              break;
+          case 'center':
+              header.style.textAlign = 'center';
+              break;
+          case 'right':
+              header.style.textAlign = 'right';
+              break;
+      }
+  }
+
+  // Eventos de alteração de alinhamento para os cabeçalhos "Beta" e "Releases"
+  document.getElementById('beta-alignment').addEventListener('change', function() {
+      const alignment = this.value;
+      changeHeaderAlignment(betaHeader, alignment);
+  });
+
+  document.getElementById('releases-alignment').addEventListener('change', function() {
+      const alignment = this.value;
+      changeHeaderAlignment(releasesHeader, alignment);
+  });
+});
+
 // Reset para as configurações padrão
 document.getElementById('reset-defaults').addEventListener('click', function () {
-    // Reseta para largura de 50% e alinhamento central
-    document.querySelectorAll('.section').forEach(section => {
-        section.style.width = "48%";
-    });
-    document.querySelector('main').style.justifyContent = "space-between";
-    document.getElementById('section-width').value = "50%";
-    document.getElementById('alignment').value = "center";
+  // Reseta para largura de 50% e alinhamento central
+  document.querySelectorAll('.section').forEach(section => {
+      section.style.width = "48%";
+  });
+  document.querySelector('main').style.justifyContent = "space-between";
+  document.getElementById('section-width').value = "50%";
+  document.getElementById('alignment').value = "center";
+
+  // Resetar alinhamento dos cabeçalhos "Beta" e "Releases"
+  document.getElementById('beta-alignment').value = "center";
+  document.getElementById('releases-alignment').value = "center";
+  document.getElementById('beta-header').style.textAlign = 'center';
+  document.getElementById('releases-header').style.textAlign = 'center';
 });
 
 async function fetchDownloadCount() {
