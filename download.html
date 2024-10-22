@@ -1,166 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-<html>
 
 <head>
     <meta charset="utf-8">
     <title>---- FDPClient betas ----</title>
-     <meta content="FDPCLient (click here to download)" property="og:title" />
-     <meta content="FDP Client betas click the above to download" property="og:description" />
-     <meta content="https://fdpmc.github.io/home/download" property="og:url" />
-     <meta content="https://raw.githubusercontent.com/fdpmc/fdpmc.github.io/main/img/fdpdownload.png" property="og:image" />
-     <meta name="twitter:card" content="summary_large_image">
-     <meta content="#43B581" data-react-helmet="true" name="theme-color" />
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <meta name="keywords" content="FDPCLIENT, fdp, opensource, free, hacked client, rise client, getfdp.today, fdpclient.club, minecraft, client, FDPclient github, fdp client github, miecraft client, FDPclient download">
+    <meta content="FDPCLient (click here to download)" property="og:title" />
+    <meta content="FDP Client betas click the above to download" property="og:description" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FDPClient</title>
+    <link rel="stylesheet" href="src/css/style.css">
     
-
-    <style>
-        .space {
-            height: 50px;
-        }
-        
-        .img {
-            transition: all 2s;
-        }
-    </style>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css" integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js" integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A" crossorigin="anonymous"></script>
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 
-<body style="background: rgba(40,43,48)"> 
-    <br/>
-    <br/>
-    <div class="mdui-container">
-        <div class="mdui-card mdui-hoverable">
-            <div class="mdui-card-media" style="overflow: hidden;height: 400px;">
-                <img src="img/blue.png" class="img" />
-                <div class="mdui-card-media-covered mdui-card-media-covered-gradient">
-                    <div class="mdui-card-primary" style="text-align: center;">
-                        <div class="mdui-card-primary-title">FDP Client</div>
-                        <div class="mdui-card-primary-subtitle">Latest github actions<br/>Downloads may contain bugs as they are pre release</div>
-                    </div>
-                </div>
+<body class="bg-color-rgb font-family-inter letter-spacing-negative-0-01em text-color-to-gray-50 font-smoothing-antialiased">
+    <header>
+        FDPClient - A Minecraft Forge Mixin-Based Hacked Client
+        <button id="accessibility-btn">
+            <i class="fas fa-universal-access"></i> Accessibility
+        </button>
+        <div id="accessibility-menu">
+            <button class="toggle-button" data-target="#section-width-wrapper">Adjust Section Width</button>
+            <div id="section-width-wrapper">
+                <label for="section-width">Adjust Section Width</label>
+                <select id="section-width">
+                    <option value="100%">Full Width</option>
+                    <option value="75%">75% Width</option>
+                    <option value="50%" selected>50% Width</option>
+                    <option value="25%">25% Width</option>
+                </select>
             </div>
+            <button class="toggle-button" data-target="#alignment-wrapper">Adjust Alignment</button>
+            <div id="alignment-wrapper">
+                <label for="alignment">Adjust Alignment</label>
+                <select id="alignment">
+                    <option value="flex-start">Left</option>
+                    <option value="center" selected>Center</option>
+                    <option value="flex-end">Right</option>
+                </select>
+                <label for="beta-alignment">Beta Header Alignment</label>
+                <select id="beta-alignment">
+                    <option value="left">Left</option>
+                    <option value="center" selected>Center</option>
+                    <option value="right">Right</option>
+                </select>
+                <label for="releases-alignment">Releases Header Alignment</label>
+                <select id="releases-alignment">
+                    <option value="left">Left</option>
+                    <option value="center" selected>Center</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+            
+            <!-- Botões para ocultar/exibir seções -->
+            <button id="toggle-beta-section">Toggle Beta Section</button>
+            <button id="toggle-releases-section">Toggle Releases Section</button>
+
+            <button id="reset-defaults">Reset to Default</button>
         </div>
+    </header>
 
+    <div id="download-count">Total Downloads: Waiting...</div>
 
-      <!-- Add icon library -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style>
-        .btn {
-        background-color: DodgerBlue;
-        border: none;
-        border-radius: 10px;
-        color: white;
-        padding: 12px 30px;
-        cursor: pointer;
-        font-size: 20px;
-        }
+    <div class="buttons-container">
+        <a href="https://fdpmc-donations.example.com" class="button">Donate Now!</a>
+        <a href="https://nightly.link/SkidderMC/FDPClient/workflows/build/main/FDPClient.zip" class="button">Download Latest Build</a>
+    </div>
 
-        /* Darker background on mouse-over */
-         .btn:hover {
-          background-color: RoyalBlue;
-         }
-         </style>
-
-         <h2> </h2>
-
-         <p> </p>
-         <button class="btn" style="width:100%"><a href="https://nightly.link/SkidderMC/FDPClient/workflows/build/main/FDPClient.zip"</a><i class="fa fa-download"></i> Download the latest beta</button>
-        <div class="space"></div>
-        <div class="mdui-container">
+    <main class="mx-auto largura-maxima-72rem padding-left-right-1rem media-padding-horizontal-1-5rem">
+        <div class="section" id="artifacts-section">
+            <h2 id="beta-header">Beta</h2>
+            <div class="space" id="loading-badge">
+                <div class="mdui-spinner"></div>
+            </div>
             <table class="mdui-table mdui-hoverable">
-                <style>
-                table {
-                border-collapse: collapse;
-                width: 100%;
-                }
-
-                tr {
-                border-bottom: 1px solid #36393e;
-                }   
-                th, td {
-                padding: 20px;
-                }
-                </style>
-                <table style="background-color:#424549;color:white;">
-                <tr style="background-color:#282b30;color:white;">
                 <thead>
                     <tr>
                         <th>Commit</th>
-                        <th>Branch</th>
                         <th>Date</th>
-                        <th>Change log</th>
-                        <th>Downloads</th>
+                        <th>Builds</th>
+                        <th>ChangeLogs</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
                 </tbody>
             </table>
         </div>
-    </div>
-   <div class="space" style="color: #424549;font-size:xx-large;text-align: center;" id="loading-badge">
-        <div class="mdui-spinner"></div>
-    </div>
+        <div class="section" id="releases-section">
+            <h2 id="releases-header">Releases</h2>
+            <div id="releases-tbody"></div>
+        </div>
+    </main>
 
-    <!-- JavaScript Libraries -->
-    <script src="lib/jquery/jquery.min.js"></script>
-    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
     <script>
-        var verJson = []
-
-        function addVer(sha, time, msg, artifact_id, branch) {
-            if(branch == "main") {
-                branch = "stable"
-            }
-            verJson.push({
-                link: "https://github.com/SkidderMC/FDPClient/commit/" + sha,
-                sha: sha,
-                time: new Date(time),
-                msg: msg,
-                download_link: "https://nightly.link/SkidderMC/FDPClient/actions/runs/" + artifact_id + "/FDPClient.zip",
-                branch: branch
-            })
-            refresh()
-        }
-
-        function refresh() {
-            $('#loading-badge').html("");
-            $("#tbody").html("");
-            verJson.sort(function(a, b) {
-                return a.time.getTime() - b.time.getTime();
-            }).sort(function(a, b) {
-                return -1 // this is a really stupid method right?
-            }).forEach(element => {    
-                $("#tbody").append('<tr><td><a href="' + element.link + '"style="color:#FFFFFF">' + element.sha.substring(0, 7) + '</a></td><td>' + element.branch + '</td><td>' + element.time.toLocaleString() + '</td><td>' + element.msg + '</td><td><a href="' + element.download_link + '"style="color:#7289da">Download</a></td></tr>')
-            })
-        }
-
-        $.get("https://api.github.com/repos/SkidderMC/FDPClient/actions/runs", function(data, status) {
-            data.workflow_runs.forEach(element => {
-                if (element.name == 'build') {
-                    addVer(element.head_commit.id, element.head_commit.timestamp, element.head_commit.message, element.id, element.head_branch)
-                }
-            });
-        })
-
-        function fn3() {
-            var r = Math.floor(Math.random() * 256);
-            var g = Math.floor(Math.random() * 256);
-            var b = Math.floor(Math.random() * 256);
-            return "rgb(" + r + ',' + g + ',' + b + ")";
-        }
-
-        // this seems not working
-        rainbow();
-
-        function rainbow() {
-            $(".img").css("filter", "brightness(1.1) drop-shadow(0 0 " + fn3() + ")");
-            setTimeout("rainbow();", 2000);
-        }
+        AOS.init({
+            once: true,
+            disable: function () {
+              return window.innerWidth < 768;
+            },
+            duration: 1000,
+            easing: 'ease-out-cubic',
+        });
     </script>
+    
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    
+    <!-- Seus scripts JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="src/js/main.js" defer></script>
+
 </body>
+
 </html>
