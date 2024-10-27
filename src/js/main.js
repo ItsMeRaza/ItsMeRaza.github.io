@@ -1,4 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
 AOS.init({
   once: true,
   disable: 'phone',
@@ -262,13 +261,10 @@ var verJson = [];
 var releaseJson = [];
 
 // Mostrar/ocultar menu de acessibilidade
-const accessibilityButton = document.getElementById('accessibility-btn');
-if (accessibilityButton) {
-  accessibilityButton.addEventListener('click', function () {
+document.getElementById('accessibility-btn').addEventListener('click', function () {
     const menu = document.getElementById('accessibility-menu');
     menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
-  });
-}
+});
 
 // Toggle sections
 document.querySelectorAll('.toggle-button').forEach(button => {
@@ -294,6 +290,7 @@ document.getElementById('alignment').addEventListener('change', function () {
 });
 
 // Adicionando suporte ao alinhamento dos cabeçalhos "Beta" e "Releases"
+document.addEventListener('DOMContentLoaded', function() {
   const betaSection = document.getElementById('artifacts-section');
   const releasesSection = document.getElementById('releases-section');
   const betaHeader = document.getElementById('beta-header');
@@ -378,118 +375,117 @@ document.getElementById('alignment').addEventListener('change', function () {
       betaSection.style.display = 'block';
       releasesSection.style.display = 'block';
   });
+});
 
-  // Reset para as configurações padrão
+// Reset para as configurações padrão
 document.getElementById('reset-defaults').addEventListener('click', function () {
-  const sections = document.querySelectorAll('.section');
-  sections.forEach(section => section.style.width = "48%");
-  document.querySelector('main').style.justifyContent = "space-between";
-  
-  const resetElements = [
-    { id: 'section-width', value: "50%" },
-    { id: 'alignment', value: "center" },
-    { id: 'beta-alignment', value: "center", styleProp: 'textAlign', elementId: 'beta-header' },
-    { id: 'releases-alignment', value: "center", styleProp: 'textAlign', elementId: 'releases-header' }
-  ];
-
-  resetElements.forEach(({ id, value, styleProp, elementId }) => {
-    document.getElementById(id).value = value;
-    if (styleProp && elementId) document.getElementById(elementId).style[styleProp] = value;
+  // Reseta para largura de 50% e alinhamento central
+  document.querySelectorAll('.section').forEach(section => {
+      section.style.width = "48%";
   });
+  document.querySelector('main').style.justifyContent = "space-between";
+  document.getElementById('section-width').value = "50%";
+  document.getElementById('alignment').value = "center";
+  // Reseta o alinhamento dos cabeçalhos "Beta" e "Releases"
+  document.getElementById('beta-alignment').value = "center";
+  document.getElementById('releases-alignment').value = "center";
+  document.getElementById('beta-header').style.textAlign = 'center';
+  document.getElementById('releases-header').style.textAlign = 'center';
 
+  // Restabelecer a visibilidade das seções "Beta" e "Releases"
   document.getElementById('artifacts-section').style.display = 'block';
   document.getElementById('releases-section').style.display = 'block';
 });
 
 async function fetchDownloadCount() {
-  const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-  const data = await response.json();
-  const totalDownloads = data.reduce((total, release) => 
-    total + release.assets.reduce((sum, asset) => sum + asset.download_count, 0), 0);
-  
-  document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
+    let totalDownloads = 0;
+    const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
+    const data = await response.json();
+    data.forEach(release => {
+        release.assets.forEach(asset => {
+            totalDownloads += asset.download_count;
+        });
+    });
+    document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
 }
 
 function addBetaVer(sha, time, msg, artifact_id) {
-  verJson.push({
-    link: `https://github.com/SkidderMC/FDPClient/commit/${sha}`,
-    sha,
-    time: new Date(time),
-    msg,
-    download_link: `https://nightly.link/SkidderMC/FDPClient/actions/runs/${artifact_id}/FDPClient.zip`
-  });
-  refreshBeta();
+    verJson.push({
+        link: "https://github.com/SkidderMC/FDPClient/commit/" + sha,
+        sha: sha,
+        time: new Date(time),
+        msg: msg,
+        download_link: "https://nightly.link/SkidderMC/FDPClient/actions/runs/" + artifact_id + "/FDPClient.zip"
+    });
+    refreshBeta();
 }
 
 function addRelease(tag_name, time, changelog_url, download_count) {
-  releaseJson.push({
-    tag_name,
-    time: new Date(time),
-    changelog_link: changelog_url,
-    download_count
-  });
-  refreshReleases();
+    releaseJson.push({
+        tag_name: tag_name,
+        time: new Date(time),
+        changelog_link: changelog_url,
+        download_count: download_count
+    });
+    refreshReleases();
 }
 
 function refreshBeta() {
-  const tbody = $("#tbody").empty();
-  verJson.sort((a, b) => b.time - a.time)
-    .slice(0, 30)
-    .forEach(({ link, sha, time, download_link, msg }) => {
-      tbody.append(`
-        <tr>
-          <td><a href="${link}" style="color:#FFFFFF">${sha.substring(0, 7)}</a></td>
-          <td>${time.toLocaleString()}</td>
-          <td><a href="${download_link}" style="color:#7289da">Download</a></td>
-          <td>${msg}</td>
-        </tr>
-      `);
-    });
+    $('#loading-badge').html("");
+    $("#tbody").html("");
+    verJson.sort((a, b) => b.time.getTime() - a.time.getTime())
+        .slice(0, 30)
+        .forEach(element => {
+            $("#tbody").append(`<tr>
+    <td><a href="${element.link}" style="color:#FFFFFF"> ${element.sha.substring(0, 7)}</a></td>
+    <td>${element.time.toLocaleString()}</td>
+    <td><a href="${element.download_link}" style="color:#7289da">Download</a></td>
+    <td>${element.msg}</td>
+</tr>`);
+        });
 }
 
 function refreshReleases() {
-  const releasesTbody = $('#releases-tbody').empty();
-  releaseJson.sort((a, b) => b.time - a.time).forEach(({ tag_name, time, changelog_link, download_count }) => {
-    releasesTbody.append(`
-      <div class="release-info">
-        <strong>${tag_name}</strong> (${time.toLocaleDateString()})<br>
-        <a href="${changelog_link}" target="_blank">View Release</a><br>
-        <span>Download Count: ${download_count}</span>
-      </div>
-    `);
-  });
+    $('#releases-tbody').html("");
+    releaseJson.sort((a, b) => b.time.getTime() - a.time.getTime()).forEach(element => {
+        $("#releases-tbody").append(`
+            <div class="release-info">
+                <strong>${element.tag_name}</strong> (${element.time.toLocaleDateString()})<br>
+                <a href="${element.changelog_link}" target="_blank">View Release</a><br>
+                <span>Download Count: ${element.download_count}</span>
+            </div>
+        `);
+    });
 }
 
 async function fetchWorkflowRuns() {
-  let page = 1, hasMorePages = true;
-  while (hasMorePages) {
-    const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`);
-    const { workflow_runs } = await response.json();
-    
-    if (workflow_runs.length > 0) {
-      workflow_runs.forEach(({ head_commit, id }) => 
-        addBetaVer(head_commit.id, head_commit.timestamp, head_commit.message, id)
-      );
-      page++;
-    } else {
-      hasMorePages = false;
+    let page = 1;
+    let hasMorePages = true;
+    while (hasMorePages) {
+        const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`);
+        const data = await response.json();
+        if (data.workflow_runs.length > 0) {
+            data.workflow_runs.forEach(element => {
+                addBetaVer(element.head_commit.id, element.head_commit.timestamp, element.head_commit.message, element.id);
+            });
+            page++;
+        } else {
+            hasMorePages = false;
+        }
     }
-  }
 }
 
+// Fetch releases from GitHub
 async function fetchReleases() {
-  const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-  const data = await response.json();
+    const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/releases`);
+    const data = await response.json();
 
-  data.forEach(release => {
-    const downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
-    addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
-  });
+    data.forEach(release => {
+        let downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
+        addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
+    });
 }
 
-// Iniciar fetch de dados
 fetchDownloadCount();
 fetchWorkflowRuns();
 fetchReleases();
-
-});
