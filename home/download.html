@@ -1,15 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-<html>
 
 <head>
     <meta charset="utf-8">
-    <title>---- FDPClient betas ----</title>
-     <meta content="FDPCLient (click here to download)" property="og:title" />
-     <meta content="FDP Client betas click the above to download" property="og:description" />
-     <meta content="https://fdpmc.github.io/home/download" property="og:url" />
-     <meta content="https://raw.githubusercontent.com/fdpmc/home/main/img/fdpdownload.png" property="og:image" />
-     <meta name="twitter:card" content="summary_large_image">
-     <meta http-equiv="Refresh" content="0; url='https://fdpinfo.github.io/download'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Download FDP Client betas for Minecraft - click to get the latest version.">
+    <meta http-equiv="Refresh" content="0; url='https://fdpinfo.github.io/download'" />
+    
+    <link rel="icon" href="src/resources/png/fdp.png" type="image/x-icon">
+
+    <title>FDPClient - Minecraft Forge Mixin-Based Hacked Client</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 </head>
+
+<body class="bg-color-rgb font-family-inter letter-spacing-negative-0-01em text-color-gray-50 font-smoothing-antialiased">
+    <header>
+        <h1>FDPClient - A Minecraft Forge Mixin-Based Hacked Client</h1>
+        <button id="accessibility-btn" aria-label="Toggle Accessibility Options">
+            <i class="fas fa-universal-access"></i> Accessibility
+        </button>
+        <nav id="accessibility-menu" aria-hidden="true">
+            <button class="toggle-button" data-target="#section-width-wrapper">Adjust Section Width</button>
+            <div id="section-width-wrapper">
+                <label for="section-width">Adjust Section Width</label>
+                <select id="section-width" aria-label="Section Width">
+                    <option value="100%">Full Width</option>
+                    <option value="75%">75% Width</option>
+                    <option value="50%" selected>50% Width</option>
+                    <option value="25%">25% Width</option>
+                </select>
+            </div>
+            <button class="toggle-button" data-target="#alignment-wrapper">Adjust Alignment</button>
+            <div id="alignment-wrapper">
+                <label for="alignment">Adjust Alignment</label>
+                <select id="alignment" aria-label="Alignment">
+                    <option value="flex-start">Left</option>
+                    <option value="center" selected>Center</option>
+                    <option value="flex-end">Right</option>
+                </select>
+            </div>
+            <button id="toggle-beta-section">Toggle Beta Section</button>
+            <button id="toggle-releases-section">Toggle Releases Section</button>
+            <button id="reset-defaults">Reset to Default</button>
+        </nav>
+    </header>
+
+    <div id="download-count">Total Downloads: Waiting...</div>
+
+    <div class="buttons-container">
+        <a href="https://fdpmc-donations.example.com" class="button">Donate Now!</a>
+        <a href="https://nightly.link/SkidderMC/FDPClient/workflows/build/main/FDPClient.zip" class="button">Download Latest Build</a>
+    </div>
+
+    <main class="container mx-auto max-w-72rem px-4 md:px-6">
+        <section class="section" id="artifacts-section">
+            <h2 id="beta-header">Beta</h2>
+            <div class="space" id="loading-badge">
+                <div class="mdui-spinner"></div>
+            </div>
+            <table class="mdui-table mdui-hoverable">
+                <thead>
+                    <tr>
+                        <th>Commit</th>
+                        <th>Date</th>
+                        <th>Builds</th>
+                        <th>ChangeLogs</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </section>
+
+        <section class="section" id="releases-section">
+            <h2 id="releases-header">Releases</h2>
+            <div id="releases-tbody"></div>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" async></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="src/js/main.js" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                once: true,
+                disable: () => window.innerWidth < 768,
+                duration: 1000,
+                easing: 'ease-out-cubic',
+            });
+        });
+    </script>
+</body>
+
 </html>
