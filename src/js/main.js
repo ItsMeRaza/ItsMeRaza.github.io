@@ -257,46 +257,51 @@ highlighters.forEach((highlighter) => {
   new Highlighter(highlighter);
 });
 
-let verJson = [];
-let releaseJson = [];
-
 document.addEventListener('DOMContentLoaded', () => {
     /****************************************
      * 1) REFERENCES TO DOM ELEMENTS
      ****************************************/
-    const accessibilityBtn       = document.getElementById('accessibility-btn');
-    const accessibilityMenu      = document.getElementById('accessibility-menu');
+    const accessibilityBtn        = document.getElementById('accessibility-btn');
+    const accessibilityMenu       = document.getElementById('accessibility-menu');
 
     // Toggles for Beta/Release sections
-    const toggleBetaBtn          = document.getElementById('toggle-beta-section');
-    const toggleReleasesBtn      = document.getElementById('toggle-releases-section');
+    const toggleBetaBtn           = document.getElementById('toggle-beta-section');
+    const toggleReleasesBtn       = document.getElementById('toggle-releases-section');
 
     // Toggles for "Adjust Section Width" and "Adjust Alignment"
-    const toggleWidthBtn         = document.getElementById('toggle-width');
-    const toggleAlignmentBtn     = document.getElementById('toggle-alignment');
-    const widthSection           = document.getElementById('width-section');
-    const alignmentSection       = document.getElementById('alignment-section');
+    const toggleWidthBtn          = document.getElementById('toggle-width');
+    const toggleAlignmentBtn      = document.getElementById('toggle-alignment');
+    const widthSection            = document.getElementById('width-section');
+    const alignmentSection        = document.getElementById('alignment-section');
 
     // Inputs for width and alignment
-    const sectionWidthInput      = document.getElementById('section-width');
-    const alignmentSelect        = document.getElementById('alignment');
+    const sectionWidthInput       = document.getElementById('section-width');
+    const alignmentSelect         = document.getElementById('alignment');
 
     // Inputs for Beta and Releases header alignment
-    const betaAlignmentSelect    = document.getElementById('beta-alignment');
-    const releasesAlignmentSelect= document.getElementById('releases-alignment');
+    const betaAlignmentSelect     = document.getElementById('beta-alignment');
+    const releasesAlignmentSelect = document.getElementById('releases-alignment');
 
     // Headers
-    const betaHeader             = document.getElementById('beta-header');
-    const releasesHeader         = document.getElementById('releases-header');
+    const betaHeader              = document.getElementById('beta-header');
+    const releasesHeader          = document.getElementById('releases-header');
 
     // Sections
-    const betaSection            = document.getElementById('artifacts-section');
-    const releasesSection        = document.getElementById('releases-section');
-    const allSections            = document.querySelectorAll('.section');
-    const mainElement            = document.querySelector('main');
+    const betaSection             = document.getElementById('artifacts-section');
+    const releasesSection         = document.getElementById('releases-section');
+    const allSections             = document.querySelectorAll('.section');
+    const mainElement             = document.querySelector('main');
 
     // Reset Button
-    const resetBtn               = document.getElementById('reset-defaults');
+    const resetBtn                = document.getElementById('reset-defaults');
+
+    // IMPORTANT: Ensure these arrays are declared globally somewhere, or right here:
+    let verJson = [];
+     let releaseJson = [];
+
+    /****************************************
+     * 2) EVENT LISTENERS
+     ****************************************/
 
     // 2.1) Toggle Accessibility Menu
     accessibilityBtn.addEventListener('click', () => {
@@ -313,12 +318,12 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleDisplay(releasesSection);
     });
 
-    // 2.4) Toggle "Adjust Section Width" area
+    // 2.4) Toggle "Adjust Section Width"
     toggleWidthBtn.addEventListener('click', () => {
         toggleDisplay(widthSection);
     });
 
-    // 2.5) Toggle "Adjust Alignment" area
+    // 2.5) Toggle "Adjust Alignment"
     toggleAlignmentBtn.addEventListener('click', () => {
         toggleDisplay(alignmentSection);
     });
@@ -380,158 +385,175 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Resets all settings to their default values.
-     * Beta alignment remains as original (LEFT).
      */
     function resetToDefaults() {
         // 1) Reset Section Width (~50%)
         allSections.forEach(section => {
             section.style.width = '48%';
         });
-        sectionWidthInput.value = '50%'; // So the input displays "50%"
+        sectionWidthInput.value = '50%';
 
         // 2) Reset Main Alignment
         mainElement.style.justifyContent = 'space-between';
-        alignmentSelect.value = 'center'; // If you want "center" as default selection
+        alignmentSelect.value = 'center';
 
         // 3) Reset Beta & Releases headers alignment
-        //    Beta remains "left" as originally requested.
         betaAlignmentSelect.value = 'left';
         betaHeader.style.textAlign = 'left';
 
         releasesAlignmentSelect.value = 'center';
         releasesHeader.style.textAlign = 'center';
 
-        // 4) Make Beta & Releases sections visible
+        // 4) Make Beta & Releases sections visible again
         betaSection.style.display = 'block';
         releasesSection.style.display = 'block';
 
-        // 5) Optional: Hide or show the sub-sections
-        //    If you prefer them all hidden by default, uncomment:
+        // 5) (Optional) Hide sub-sections if desired:
         // widthSection.style.display = 'none';
         // alignmentSection.style.display = 'none';
     }
-});
 
-/************************************************
- * FETCHING + DATA HANDLING
- ************************************************/
+    /************************************************
+     * 5) FETCHING + DATA HANDLING
+     ************************************************/
 
-/**
- * Fetch total download count from GitHub releases.
- */
-async function fetchDownloadCount() {
-    let totalDownloads = 0;
-    const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-    const data = await response.json();
-
-    data.forEach(release => {
-        release.assets.forEach(asset => {
-            totalDownloads += asset.download_count;
-        });
-    });
-
-    document.getElementById('download-count').innerText =
-        `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
-}
-
-/**
- * Add a Beta version to the global verJson array and refresh the Beta table.
- */
-function addBetaVer(sha, time, msg, artifact_id) {
-    verJson.push({
-        link: `https://github.com/SkidderMC/FDPClient/commit/${sha}`,
-        sha,
-        time: new Date(time),
-        msg,
-        download_link: `https://nightly.link/SkidderMC/FDPClient/actions/runs/${artifact_id}/FDPClient.zip`
-    });
-    refreshBeta();
-}
-
-/**
- * Add a Release to the global releaseJson array and refresh the Releases section.
- */
-function addRelease(tag_name, time, changelog_url, download_count) {
-    releaseJson.push({
-        tag_name,
-        time: new Date(time),
-        changelog_link: changelog_url,
-        download_count
-    });
-    refreshReleases();
-}
-
-/**
- * Refresh the Beta table (show the latest 30 versions).
- */
-function refreshBeta() {
-    // Using jQuery for simplicity (replace with pure DOM if needed)
-    $('#loading-badge').html('');
-    $('#tbody').html('');
-
-    verJson
-        .sort((a, b) => b.time.getTime() - a.time.getTime())
-        .slice(0, 30)
-        .forEach(element => {
-            $('#tbody').append(`
-                <tr>
-                    <td><a href="${element.link}" style="color:#FFFFFF">${element.sha.substring(0, 7)}</a></td>
-                    <td>${element.time.toLocaleString()}</td>
-                    <td><a href="${element.download_link}" style="color:#7289da">Download</a></td>
-                    <td>${element.msg}</td>
-                </tr>
-            `);
-        });
-}
-
-/**
- * Refresh the Releases section.
- */
-function refreshReleases() {
-    // Using jQuery for simplicity (replace with pure DOM if needed)
-    $('#releases-tbody').html('');
-
-    releaseJson
-        .sort((a, b) => b.time.getTime() - a.time.getTime())
-        .forEach(element => {
-            $('#releases-tbody').append(`
-                <div class="release-info">
-                    <strong>${element.tag_name}</strong> (${element.time.toLocaleDateString()})<br>
-                    <a href="${element.changelog_link}" target="_blank">View Release</a><br>
-                    <span>Download Count: ${element.download_count}</span>
-                </div>
-            `);
-        });
-}
-
-/**
- * Fetch GitHub workflow runs (Beta builds) and add them to the Beta table.
- */
-async function fetchWorkflowRuns() {
-    let page = 1;
-    let hasMorePages = true;
-
-    while (hasMorePages) {
-        const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`);
+    /**
+     * Fetch total download count from GitHub releases.
+     */
+    async function fetchDownloadCount() {
+        let totalDownloads = 0;
+        const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
         const data = await response.json();
 
-        if (data.workflow_runs.length > 0) {
-            data.workflow_runs.forEach(run => {
-                addBetaVer(run.head_commit.id, run.head_commit.timestamp, run.head_commit.message, run.id);
+        data.forEach(release => {
+            release.assets.forEach(asset => {
+                totalDownloads += asset.download_count;
             });
-            page++;
-        } else {
-            hasMorePages = false;
+        });
+
+        document.getElementById('download-count').innerText =
+            `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
+    }
+
+    /**
+     * Add a Beta version to the global verJson array and refresh the Beta table.
+     */
+    function addBetaVer(sha, time, msg, artifact_id) {
+        // Make sure verJson is a global array declared above or in the HTML
+        verJson.push({
+            link: `https://github.com/SkidderMC/FDPClient/commit/${sha}`,
+            sha,
+            time: new Date(time),
+            msg,
+            download_link: `https://nightly.link/SkidderMC/FDPClient/actions/runs/${artifact_id}/FDPClient.zip`
+        });
+        refreshBeta();
+    }
+
+    /**
+     * Add a Release to the global releaseJson array and refresh the Releases section.
+     */
+    function addRelease(tag_name, time, changelog_url, download_count) {
+        // Make sure releaseJson is a global array declared above or in the HTML
+        releaseJson.push({
+            tag_name,
+            time: new Date(time),
+            changelog_link: changelog_url,
+            download_count
+        });
+        refreshReleases();
+    }
+
+    /**
+     * Refresh the Beta table (show the latest 30 versions).
+     */
+    function refreshBeta() {
+        // Using jQuery for simplicity
+        $('#loading-badge').html('');
+        $('#tbody').html('');
+
+        verJson
+            .sort((a, b) => b.time.getTime() - a.time.getTime())
+            .slice(0, 30)
+            .forEach(element => {
+                $('#tbody').append(`
+                    <tr>
+                        <td>
+                            <a href="${element.link}" style="color:#FFFFFF">
+                                ${element.sha.substring(0, 7)}
+                            </a>
+                        </td>
+                        <td>${element.time.toLocaleString()}</td>
+                        <td>
+                            <a href="${element.download_link}" style="color:#7289da">
+                                Download
+                            </a>
+                        </td>
+                        <td>${element.msg}</td>
+                    </tr>
+                `);
+            });
+    }
+
+    /**
+     * Refresh the Releases section.
+     */
+    function refreshReleases() {
+        // Using jQuery for simplicity
+        $('#releases-tbody').html('');
+
+        releaseJson
+            .sort((a, b) => b.time.getTime() - a.time.getTime())
+            .forEach(element => {
+                $('#releases-tbody').append(`
+                    <div class="release-info">
+                        <strong>${element.tag_name}</strong> (${element.time.toLocaleDateString()})<br>
+                        <a href="${element.changelog_link}" target="_blank">View Release</a><br>
+                        <span>Download Count: ${element.download_count}</span>
+                    </div>
+                `);
+            });
+    }
+
+    /**
+     * Fetch GitHub workflow runs (Beta builds) and add them to the Beta table.
+     */
+    async function fetchWorkflowRuns() {
+        let page = 1;
+        let hasMorePages = true;
+
+        while (hasMorePages) {
+            const response = await fetch(
+                `https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`
+            );
+            const data = await response.json();
+
+            if (data.workflow_runs.length > 0) {
+                data.workflow_runs.forEach(run => {
+                    addBetaVer(
+                        run.head_commit.id,
+                        run.head_commit.timestamp,
+                        run.head_commit.message,
+                        run.id
+                    );
+                });
+                page++;
+            } else {
+                hasMorePages = false;
+            }
         }
     }
-}
 
-async function fetchReleases() {
-    const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-    const data = await response.json();
+    /**
+     * Fetch all Releases from GitHub and add them to the releaseJson array.
+     */
+    async function fetchReleases() {
+        const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
+        const data = await response.json();
 
-    data.forEach(release => {
-        const downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
-        addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
-    });
-}
+        data.forEach(release => {
+            const downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
+            addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
+        });
+    }
+});

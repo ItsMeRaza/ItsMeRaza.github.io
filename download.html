@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--
-      Description and Keywords (Optional for modern SEO, but you can keep them if you want).
-      If you keep them, ensure they are relevant and not too long.
-    -->
+    <!-- Optional SEO meta -->
     <meta name="description" content="Download FDP Client betas for Minecraft - click to get the latest version." />
     <meta name="keywords" content="FDPCLIENT, fdp, opensource, free, hacked client, rise client, getfdp.today, fdpclient.club, minecraft, client, FDPclient github, fdp client github, miecraft client, FDPclient download" />
 
-    <!-- Preconnect to external domains for faster resource loading -->
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="preconnect" href="https://unpkg.com" />
     <link rel="preconnect" href="https://code.jquery.com" />
@@ -23,23 +19,9 @@
     <title>FDPClient - Minecraft Forge Mixin-Based Hacked Client</title>
 
     <!-- Stylesheets -->
-    <!-- Loading them in the <head> for faster first paint; you can consider inlining critical CSS if needed. -->
     <link rel="stylesheet" href="src/css/style.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-
-    <!--
-      Optional: If you want to ensure that AOS and other libraries are loaded promptly,
-      you can add resource hints like "dns-prefetch" or "preload" for CSS.
-      Example:
-      <link rel="preload" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" as="style">
-    -->
-
-    <!--
-      Small performance tip:
-      - Put your fonts either preloaded or inlined if they are critical to layout.
-      - Use font-display: swap or optional to improve text rendering speed.
-    -->
 </head>
 
 <body class="bg-color-rgb font-family-inter letter-spacing-negative-0-01em text-color-gray-50 font-smoothing-antialiased">
@@ -48,10 +30,11 @@
     <button id="accessibility-btn" aria-label="Toggle Accessibility Options">
         <i class="fas fa-universal-access"></i> Accessibility
     </button>
+
     <nav id="accessibility-menu" aria-hidden="true">
-        <!-- Toggle buttons -->
-        <button class="toggle-button" data-target="#section-width-wrapper">Adjust Section Width</button>
-        <div id="section-width-wrapper">
+        <!-- Toggle "Adjust Section Width" -->
+        <button id="toggle-width">Adjust Section Width</button>
+        <div id="width-section" style="display: none;">
             <label for="section-width">Adjust Section Width</label>
             <select id="section-width" aria-label="Section Width">
                 <option value="100%">Full Width</option>
@@ -61,16 +44,36 @@
             </select>
         </div>
 
-        <button class="toggle-button" data-target="#alignment-wrapper">Adjust Alignment</button>
-        <div id="alignment-wrapper">
-            <label for="alignment">Adjust Alignment</label>
+        <!-- Toggle "Adjust Alignment" -->
+        <button id="toggle-alignment">Adjust Alignment</button>
+        <div id="alignment-section" style="display: none;">
+            <!-- Main alignment -->
+            <label for="alignment">Adjust Main Alignment</label>
             <select id="alignment" aria-label="Alignment">
                 <option value="flex-start">Left</option>
                 <option value="center" selected>Center</option>
                 <option value="flex-end">Right</option>
+                <option value="space-between">Space Between</option>
+            </select>
+
+            <!-- Beta header alignment -->
+            <label for="beta-alignment">Beta Header Alignment</label>
+            <select id="beta-alignment">
+                <option value="left" selected>Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+            </select>
+
+            <!-- Releases header alignment -->
+            <label for="releases-alignment">Releases Header Alignment</label>
+            <select id="releases-alignment">
+                <option value="left">Left</option>
+                <option value="center" selected>Center</option>
+                <option value="right">Right</option>
             </select>
         </div>
 
+        <!-- Toggle Beta / Releases Sections and Reset -->
         <button id="toggle-beta-section">Toggle Beta Section</button>
         <button id="toggle-releases-section">Toggle Releases Section</button>
         <button id="reset-defaults">Reset to Default</button>
@@ -80,7 +83,7 @@
 <!-- Download count -->
 <div id="download-count">Total Downloads: Waiting...</div>
 
-<!-- Buttons container -->
+<!-- Example buttons container (Optional) -->
 <div class="buttons-container">
     <a href="https://fdpmc-donations.example.com" class="button">Donate Now!</a>
     <a href="https://nightly.link/SkidderMC/FDPClient/workflows/build/main/FDPClient.zip" class="button">Download Latest Build</a>
@@ -113,13 +116,12 @@
     </section>
 </main>
 
-<!-- JavaScript (deferred or async) -->
-<!-- Place scripts at the bottom for better performance. -->
-<!-- If a script does not depend on the DOM, you can use "async" instead of "defer". -->
-
+<!-- JavaScript (deferred for performance) -->
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+
+<!-- Your main script -->
 <script src="src/js/main.js" defer></script>
 
 <!-- Initialize AOS after the DOM is parsed -->
@@ -134,5 +136,4 @@
     });
 </script>
 </body>
-
 </html>
