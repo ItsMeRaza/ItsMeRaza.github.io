@@ -257,216 +257,267 @@ highlighters.forEach((highlighter) => {
   new Highlighter(highlighter);
 });
 
-var verJson = [];
-var releaseJson = [];
+let verJson = [];
+let releaseJson = [];
 
-// Mostrar/ocultar menu de acessibilidade
-document.getElementById('accessibility-btn').addEventListener('click', function () {
-    const menu = document.getElementById('accessibility-menu');
-    menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
-});
+document.addEventListener('DOMContentLoaded', () => {
+    /****************************************
+     * 1) REFERENCES TO DOM ELEMENTS
+     ****************************************/
+    const accessibilityBtn       = document.getElementById('accessibility-btn');
+    const accessibilityMenu      = document.getElementById('accessibility-menu');
 
-// Toggle sections
-document.querySelectorAll('.toggle-button').forEach(button => {
-    button.addEventListener('click', function () {
-        const target = document.querySelector(this.dataset.target);
-        target.style.display = target.style.display === 'none' || target.style.display === '' ? 'block' : 'none';
-        this.classList.toggle('collapsed');
+    // Toggles for Beta/Release sections
+    const toggleBetaBtn          = document.getElementById('toggle-beta-section');
+    const toggleReleasesBtn      = document.getElementById('toggle-releases-section');
+
+    // Toggles for "Adjust Section Width" and "Adjust Alignment"
+    const toggleWidthBtn         = document.getElementById('toggle-width');
+    const toggleAlignmentBtn     = document.getElementById('toggle-alignment');
+    const widthSection           = document.getElementById('width-section');
+    const alignmentSection       = document.getElementById('alignment-section');
+
+    // Inputs for width and alignment
+    const sectionWidthInput      = document.getElementById('section-width');
+    const alignmentSelect        = document.getElementById('alignment');
+
+    // Inputs for Beta and Releases header alignment
+    const betaAlignmentSelect    = document.getElementById('beta-alignment');
+    const releasesAlignmentSelect= document.getElementById('releases-alignment');
+
+    // Headers
+    const betaHeader             = document.getElementById('beta-header');
+    const releasesHeader         = document.getElementById('releases-header');
+
+    // Sections
+    const betaSection            = document.getElementById('artifacts-section');
+    const releasesSection        = document.getElementById('releases-section');
+    const allSections            = document.querySelectorAll('.section');
+    const mainElement            = document.querySelector('main');
+
+    // Reset Button
+    const resetBtn               = document.getElementById('reset-defaults');
+
+    // 2.1) Toggle Accessibility Menu
+    accessibilityBtn.addEventListener('click', () => {
+        toggleDisplay(accessibilityMenu);
     });
-});
 
-// Ajustar largura das seções
-document.getElementById('section-width').addEventListener('change', function () {
-    const newWidth = this.value;
-    document.querySelectorAll('.section').forEach(section => {
-        section.style.width = newWidth;
+    // 2.2) Toggle Beta Section
+    toggleBetaBtn.addEventListener('click', () => {
+        toggleDisplay(betaSection);
     });
+
+    // 2.3) Toggle Releases Section
+    toggleReleasesBtn.addEventListener('click', () => {
+        toggleDisplay(releasesSection);
+    });
+
+    // 2.4) Toggle "Adjust Section Width" area
+    toggleWidthBtn.addEventListener('click', () => {
+        toggleDisplay(widthSection);
+    });
+
+    // 2.5) Toggle "Adjust Alignment" area
+    toggleAlignmentBtn.addEventListener('click', () => {
+        toggleDisplay(alignmentSection);
+    });
+
+    // 2.6) Adjust Section Width
+    sectionWidthInput.addEventListener('change', () => {
+        allSections.forEach(section => {
+            section.style.width = sectionWidthInput.value;
+        });
+    });
+
+    // 2.7) Adjust Main Alignment
+    alignmentSelect.addEventListener('change', () => {
+        mainElement.style.justifyContent = alignmentSelect.value;
+    });
+
+    // 2.8) Change Beta Header Alignment
+    betaAlignmentSelect.addEventListener('change', () => {
+        changeHeaderAlignment(betaHeader, betaAlignmentSelect.value);
+    });
+
+    // 2.9) Change Releases Header Alignment
+    releasesAlignmentSelect.addEventListener('change', () => {
+        changeHeaderAlignment(releasesHeader, releasesAlignmentSelect.value);
+    });
+
+    // 2.10) Reset to Defaults
+    resetBtn.addEventListener('click', () => {
+        resetToDefaults();
+    });
+
+    /****************************************
+     * 3) INITIAL FETCH CALLS
+     ****************************************/
+    fetchDownloadCount();
+    fetchWorkflowRuns();
+    fetchReleases();
+
+    /****************************************
+     * 4) HELPER FUNCTIONS
+     ****************************************/
+
+    /**
+     * Toggles an element between 'none' and 'block'.
+     */
+    function toggleDisplay(element) {
+        element.style.display =
+            (element.style.display === 'none' || !element.style.display)
+                ? 'block'
+                : 'none';
+    }
+
+    /**
+     * Changes the text alignment of a given header element.
+     */
+    function changeHeaderAlignment(header, alignment) {
+        header.style.textAlign = alignment;
+    }
+
+    /**
+     * Resets all settings to their default values.
+     * Beta alignment remains as original (LEFT).
+     */
+    function resetToDefaults() {
+        // 1) Reset Section Width (~50%)
+        allSections.forEach(section => {
+            section.style.width = '48%';
+        });
+        sectionWidthInput.value = '50%'; // So the input displays "50%"
+
+        // 2) Reset Main Alignment
+        mainElement.style.justifyContent = 'space-between';
+        alignmentSelect.value = 'center'; // If you want "center" as default selection
+
+        // 3) Reset Beta & Releases headers alignment
+        //    Beta remains "left" as originally requested.
+        betaAlignmentSelect.value = 'left';
+        betaHeader.style.textAlign = 'left';
+
+        releasesAlignmentSelect.value = 'center';
+        releasesHeader.style.textAlign = 'center';
+
+        // 4) Make Beta & Releases sections visible
+        betaSection.style.display = 'block';
+        releasesSection.style.display = 'block';
+
+        // 5) Optional: Hide or show the sub-sections
+        //    If you prefer them all hidden by default, uncomment:
+        // widthSection.style.display = 'none';
+        // alignmentSection.style.display = 'none';
+    }
 });
 
-// Ajustar alinhamento das seções
-document.getElementById('alignment').addEventListener('change', function () {
-    const newAlign = this.value;
-    document.querySelector('main').style.justifyContent = newAlign;
-});
+/************************************************
+ * FETCHING + DATA HANDLING
+ ************************************************/
 
-// Adicionando suporte ao alinhamento dos cabeçalhos "Beta" e "Releases"
-document.addEventListener('DOMContentLoaded', function() {
-  const betaSection = document.getElementById('artifacts-section');
-  const releasesSection = document.getElementById('releases-section');
-  const betaHeader = document.getElementById('beta-header');
-  const releasesHeader = document.getElementById('releases-header');
-
-  // Função para alterar o alinhamento dos cabeçalhos
-  function changeHeaderAlignment(header, alignment) {
-      switch (alignment) {
-          case 'left':
-              header.style.textAlign = 'left';
-              break;
-          case 'center':
-              header.style.textAlign = 'center';
-              break;
-          case 'right':
-              header.style.textAlign = 'right';
-              break;
-      }
-  }
-
-  // Função para alternar a visibilidade das seções
-  function toggleVisibility(section) {
-      if (section.style.display === 'none' || section.style.display === '') {
-          section.style.display = 'block';
-      } else {
-          section.style.display = 'none';
-      }
-  }
-
-  // Eventos de alteração de alinhamento para os cabeçalhos "Beta" e "Releases"
-  document.getElementById('beta-alignment').addEventListener('change', function() {
-      const alignment = this.value;
-      changeHeaderAlignment(betaHeader, alignment);
-  });
-
-  document.getElementById('releases-alignment').addEventListener('change', function() {
-      const alignment = this.value;
-      changeHeaderAlignment(releasesHeader, alignment);
-  });
-
-  // Ocultar/exibir a seção "Beta" quando o botão for clicado
-  document.getElementById('toggle-beta-section').addEventListener('click', function() {
-      toggleVisibility(betaSection);
-  });
-
-  // Ocultar/exibir a seção "Releases" quando o botão for clicado
-  document.getElementById('toggle-releases-section').addEventListener('click', function() {
-      toggleVisibility(releasesSection);
-  });
-
-  // Ajustar largura das seções
-  document.getElementById('section-width').addEventListener('change', function() {
-      const newWidth = this.value;
-      document.querySelectorAll('.section').forEach(section => {
-          section.style.width = newWidth;
-      });
-  });
-
-  // Ajustar alinhamento das seções
-  document.getElementById('alignment').addEventListener('change', function() {
-      const newAlign = this.value;
-      document.querySelector('main').style.justifyContent = newAlign;
-  });
-
-  // Reset para as configurações padrão
-  document.getElementById('reset-defaults').addEventListener('click', function() {
-      // Reseta para largura de 50% e alinhamento central
-      document.querySelectorAll('.section').forEach(section => {
-          section.style.width = "48%";
-      });
-      document.querySelector('main').style.justifyContent = "space-between";
-      document.getElementById('section-width').value = "50%";
-      document.getElementById('alignment').value = "center";
-
-      // Reseta o alinhamento dos cabeçalhos "Beta" e "Releases"
-      document.getElementById('beta-alignment').value = "center";
-      document.getElementById('releases-alignment').value = "center";
-      betaHeader.style.textAlign = 'center';
-      releasesHeader.style.textAlign = 'center';
-
-      // Restabelecer a visibilidade das seções "Beta" e "Releases"
-      betaSection.style.display = 'block';
-      releasesSection.style.display = 'block';
-  });
-});
-
-// Reset para as configurações padrão
-document.getElementById('reset-defaults').addEventListener('click', function () {
-  // Reseta para largura de 50% e alinhamento central
-  document.querySelectorAll('.section').forEach(section => {
-      section.style.width = "48%";
-  });
-  document.querySelector('main').style.justifyContent = "space-between";
-  document.getElementById('section-width').value = "50%";
-  document.getElementById('alignment').value = "center";
-  // Reseta o alinhamento dos cabeçalhos "Beta" e "Releases"
-  document.getElementById('beta-alignment').value = "center";
-  document.getElementById('releases-alignment').value = "center";
-  document.getElementById('beta-header').style.textAlign = 'center';
-  document.getElementById('releases-header').style.textAlign = 'center';
-
-  // Restabelecer a visibilidade das seções "Beta" e "Releases"
-  document.getElementById('artifacts-section').style.display = 'block';
-  document.getElementById('releases-section').style.display = 'block';
-});
-
+/**
+ * Fetch total download count from GitHub releases.
+ */
 async function fetchDownloadCount() {
     let totalDownloads = 0;
     const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
     const data = await response.json();
+
     data.forEach(release => {
         release.assets.forEach(asset => {
             totalDownloads += asset.download_count;
         });
     });
-    document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
+
+    document.getElementById('download-count').innerText =
+        `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
 }
 
+/**
+ * Add a Beta version to the global verJson array and refresh the Beta table.
+ */
 function addBetaVer(sha, time, msg, artifact_id) {
     verJson.push({
-        link: "https://github.com/SkidderMC/FDPClient/commit/" + sha,
-        sha: sha,
+        link: `https://github.com/SkidderMC/FDPClient/commit/${sha}`,
+        sha,
         time: new Date(time),
-        msg: msg,
-        download_link: "https://nightly.link/SkidderMC/FDPClient/actions/runs/" + artifact_id + "/FDPClient.zip"
+        msg,
+        download_link: `https://nightly.link/SkidderMC/FDPClient/actions/runs/${artifact_id}/FDPClient.zip`
     });
     refreshBeta();
 }
 
+/**
+ * Add a Release to the global releaseJson array and refresh the Releases section.
+ */
 function addRelease(tag_name, time, changelog_url, download_count) {
     releaseJson.push({
-        tag_name: tag_name,
+        tag_name,
         time: new Date(time),
         changelog_link: changelog_url,
-        download_count: download_count
+        download_count
     });
     refreshReleases();
 }
 
+/**
+ * Refresh the Beta table (show the latest 30 versions).
+ */
 function refreshBeta() {
-    $('#loading-badge').html("");
-    $("#tbody").html("");
-    verJson.sort((a, b) => b.time.getTime() - a.time.getTime())
+    // Using jQuery for simplicity (replace with pure DOM if needed)
+    $('#loading-badge').html('');
+    $('#tbody').html('');
+
+    verJson
+        .sort((a, b) => b.time.getTime() - a.time.getTime())
         .slice(0, 30)
         .forEach(element => {
-            $("#tbody").append(`<tr>
-    <td><a href="${element.link}" style="color:#FFFFFF"> ${element.sha.substring(0, 7)}</a></td>
-    <td>${element.time.toLocaleString()}</td>
-    <td><a href="${element.download_link}" style="color:#7289da">Download</a></td>
-    <td>${element.msg}</td>
-</tr>`);
+            $('#tbody').append(`
+                <tr>
+                    <td><a href="${element.link}" style="color:#FFFFFF">${element.sha.substring(0, 7)}</a></td>
+                    <td>${element.time.toLocaleString()}</td>
+                    <td><a href="${element.download_link}" style="color:#7289da">Download</a></td>
+                    <td>${element.msg}</td>
+                </tr>
+            `);
         });
 }
 
+/**
+ * Refresh the Releases section.
+ */
 function refreshReleases() {
-    $('#releases-tbody').html("");
-    releaseJson.sort((a, b) => b.time.getTime() - a.time.getTime()).forEach(element => {
-        $("#releases-tbody").append(`
-            <div class="release-info">
-                <strong>${element.tag_name}</strong> (${element.time.toLocaleDateString()})<br>
-                <a href="${element.changelog_link}" target="_blank">View Release</a><br>
-                <span>Download Count: ${element.download_count}</span>
-            </div>
-        `);
-    });
+    // Using jQuery for simplicity (replace with pure DOM if needed)
+    $('#releases-tbody').html('');
+
+    releaseJson
+        .sort((a, b) => b.time.getTime() - a.time.getTime())
+        .forEach(element => {
+            $('#releases-tbody').append(`
+                <div class="release-info">
+                    <strong>${element.tag_name}</strong> (${element.time.toLocaleDateString()})<br>
+                    <a href="${element.changelog_link}" target="_blank">View Release</a><br>
+                    <span>Download Count: ${element.download_count}</span>
+                </div>
+            `);
+        });
 }
 
+/**
+ * Fetch GitHub workflow runs (Beta builds) and add them to the Beta table.
+ */
 async function fetchWorkflowRuns() {
     let page = 1;
     let hasMorePages = true;
+
     while (hasMorePages) {
         const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`);
         const data = await response.json();
+
         if (data.workflow_runs.length > 0) {
-            data.workflow_runs.forEach(element => {
-                addBetaVer(element.head_commit.id, element.head_commit.timestamp, element.head_commit.message, element.id);
+            data.workflow_runs.forEach(run => {
+                addBetaVer(run.head_commit.id, run.head_commit.timestamp, run.head_commit.message, run.id);
             });
             page++;
         } else {
@@ -475,17 +526,12 @@ async function fetchWorkflowRuns() {
     }
 }
 
-// Fetch releases from GitHub
 async function fetchReleases() {
-    const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/releases`);
+    const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
     const data = await response.json();
 
     data.forEach(release => {
-        let downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
+        const downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
         addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
     });
 }
-
-fetchDownloadCount();
-fetchWorkflowRuns();
-fetchReleases();
