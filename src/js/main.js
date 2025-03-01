@@ -297,7 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // IMPORTANT: Ensure these arrays are declared globally somewhere, or right here:
     let verJson = [];
-     let releaseJson = [];
+    let releaseJson = [];
+    let totalDownloads = 0;
 
     /****************************************
      * 2) EVENT LISTENERS
@@ -362,77 +363,48 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchWorkflowRuns();
     fetchReleases();
 
-    /****************************************
-     * 4) HELPER FUNCTIONS
-     ****************************************/
-
-    /**
-     * Toggles an element between 'none' and 'block'.
-     */
-    function toggleDisplay(element) {
-        element.style.display =
-            (element.style.display === 'none' || !element.style.display)
-                ? 'block'
-                : 'none';
-    }
-
-    /**
-     * Changes the text alignment of a given header element.
-     */
-    function changeHeaderAlignment(header, alignment) {
-        header.style.textAlign = alignment;
-    }
-
-    /**
-     * Resets all settings to their default values.
-     */
-    function resetToDefaults() {
-        // 1) Reset Section Width (~50%)
-        allSections.forEach(section => {
-            section.style.width = '48%';
-        });
-        sectionWidthInput.value = '50%';
-
-        // 2) Reset Main Alignment
-        mainElement.style.justifyContent = 'space-between';
-        alignmentSelect.value = 'center';
-
-        // 3) Reset Beta & Releases headers alignment
-        betaAlignmentSelect.value = 'left';
-        betaHeader.style.textAlign = 'left';
-
-        releasesAlignmentSelect.value = 'center';
-        releasesHeader.style.textAlign = 'center';
-
-        // 4) Make Beta & Releases sections visible again
-        betaSection.style.display = 'block';
-        releasesSection.style.display = 'block';
-
-        // 5) (Optional) Hide sub-sections if desired:
-        // widthSection.style.display = 'none';
-        // alignmentSection.style.display = 'none';
-    }
 
     /************************************************
      * 5) FETCHING + DATA HANDLING
      ************************************************/
 
+
     /**
      * Fetch total download count from GitHub releases.
+     * This function now updates the global `totalDownloads` variable.
      */
     async function fetchDownloadCount() {
-        let totalDownloads = 0;
-        const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-        const data = await response.json();
+        try {
+            const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
+            const data = await response.json();
 
-        data.forEach(release => {
-            release.assets.forEach(asset => {
-                totalDownloads += asset.download_count;
-            });
-        });
+            if (data && Array.isArray(data)) {
+                totalDownloads = data.reduce((acc, release) => {
+                    if (release.assets && Array.isArray(release.assets)) {
+                        return acc + release.assets.reduce((assetAcc, asset) => assetAcc + (asset.download_count || 0), 0);
+                    }
+                    return acc;
+                }, 0);
+            } else {
+                console.error("Invalid response from GitHub Releases API:", data);
+                totalDownloads = 0; // or some default value
+            }
 
-        document.getElementById('download-count').innerText =
-            `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
+
+            updateDownloadCountDisplay(); // Update the display
+        } catch (error) {
+            console.error("Error fetching download count:", error);
+            totalDownloads = 0; // or some default value
+            updateDownloadCountDisplay();
+        }
+    }
+
+
+    /**
+     * Updates the download count display on the page.
+     */
+    function updateDownloadCountDisplay() {
+        document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
     }
 
     /**
@@ -544,16 +516,92 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
     /**
      * Fetch all Releases from GitHub and add them to the releaseJson array.
+     * After fetching releases, it updates the total download count and refreshes the display.
      */
     async function fetchReleases() {
-        const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-        const data = await response.json();
+        try {
+            const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
+            const data = await response.json();
 
-        data.forEach(release => {
-            const downloadCount = release.assets.reduce((total, asset) => total + asset.download_count, 0);
-            addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
+            if (data && Array.isArray(data)) {
+                releaseJson = []; // Clear existing releases before adding new ones
+
+                data.forEach(release => {
+                    const downloadCount = release.assets.reduce((total, asset) => total + (asset.download_count || 0), 0);
+                    addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
+                });
+
+                // Recalculate total downloads after adding all releases
+                totalDownloads = data.reduce((acc, release) => {
+                    if (release.assets && Array.isArray(release.assets)) {
+                        return acc + release.assets.reduce((assetAcc, asset) => assetAcc + (asset.download_count || 0), 0);
+                    }
+                    return acc;
+                }, 0);
+
+                updateDownloadCountDisplay();  // Update the display after fetching releases
+
+            } else {
+                console.error("Invalid response from GitHub Releases API:", data);
+            }
+
+        } catch (error) {
+            console.error("Error fetching releases:", error);
+        }
+    }
+
+
+    /****************************************
+     * 4) HELPER FUNCTIONS
+     ****************************************/
+
+    /**
+     * Toggles an element between 'none' and 'block'.
+     */
+    function toggleDisplay(element) {
+        element.style.display =
+            (element.style.display === 'none' || !element.style.display)
+                ? 'block'
+                : 'none';
+    }
+
+    /**
+     * Changes the text alignment of a given header element.
+     */
+    function changeHeaderAlignment(header, alignment) {
+        header.style.textAlign = alignment;
+    }
+
+    /**
+     * Resets all settings to their default values.
+     */
+    function resetToDefaults() {
+        // 1) Reset Section Width (~50%)
+        allSections.forEach(section => {
+            section.style.width = '48%';
         });
+        sectionWidthInput.value = '50%';
+
+        // 2) Reset Main Alignment
+        mainElement.style.justifyContent = 'space-between';
+        alignmentSelect.value = 'center';
+
+        // 3) Reset Beta & Releases headers alignment
+        betaAlignmentSelect.value = 'left';
+        betaHeader.style.textAlign = 'left';
+
+        releasesAlignmentSelect.value = 'center';
+        releasesHeader.style.textAlign = 'center';
+
+        // 4) Make Beta & Releases sections visible again
+        betaSection.style.display = 'block';
+        releasesSection.style.display = 'block';
+
+        // 5) (Optional) Hide sub-sections if desired:
+        // widthSection.style.display = 'none';
+        // alignmentSection.style.display = 'none';
     }
 });
