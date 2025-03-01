@@ -258,197 +258,197 @@ highlighters.forEach((highlighter) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    /****************************************
-     * 1) REFERENCES TO DOM ELEMENTS
-     ****************************************/
-    const accessibilityBtn        = document.getElementById('accessibility-btn');
-    const accessibilityMenu       = document.getElementById('accessibility-menu');
+  /****************************************
+   * 1) REFERENCES TO DOM ELEMENTS
+   ****************************************/
+  const accessibilityBtn = document.getElementById('accessibility-btn');
+  const accessibilityMenu = document.getElementById('accessibility-menu');
 
-    // Toggles for Beta/Release sections
-    const toggleBetaBtn           = document.getElementById('toggle-beta-section');
-    const toggleReleasesBtn       = document.getElementById('toggle-releases-section');
+  // Toggles for Beta/Release sections
+  const toggleBetaBtn = document.getElementById('toggle-beta-section');
+  const toggleReleasesBtn = document.getElementById('toggle-releases-section');
 
-    // Toggles for "Adjust Section Width" and "Adjust Alignment"
-    const toggleWidthBtn          = document.getElementById('toggle-width');
-    const toggleAlignmentBtn      = document.getElementById('toggle-alignment');
-    const widthSection            = document.getElementById('width-section');
-    const alignmentSection        = document.getElementById('alignment-section');
+  // Toggles for "Adjust Section Width" and "Adjust Alignment"
+  const toggleWidthBtn = document.getElementById('toggle-width');
+  const toggleAlignmentBtn = document.getElementById('toggle-alignment');
+  const widthSection = document.getElementById('width-section');
+  const alignmentSection = document.getElementById('alignment-section');
 
-    // Inputs for width and alignment
-    const sectionWidthInput       = document.getElementById('section-width');
-    const alignmentSelect         = document.getElementById('alignment');
+  // Inputs for width and alignment
+  const sectionWidthInput = document.getElementById('section-width');
+  const alignmentSelect = document.getElementById('alignment');
 
-    // Inputs for Beta and Releases header alignment
-    const betaAlignmentSelect     = document.getElementById('beta-alignment');
-    const releasesAlignmentSelect = document.getElementById('releases-alignment');
+  // Inputs for Beta and Releases header alignment
+  const betaAlignmentSelect = document.getElementById('beta-alignment');
+  const releasesAlignmentSelect = document.getElementById('releases-alignment');
 
-    // Headers
-    const betaHeader              = document.getElementById('beta-header');
-    const releasesHeader          = document.getElementById('releases-header');
+  // Headers
+  const betaHeader = document.getElementById('beta-header');
+  const releasesHeader = document.getElementById('releases-header');
 
-    // Sections
-    const betaSection             = document.getElementById('artifacts-section');
-    const releasesSection         = document.getElementById('releases-section');
-    const allSections             = document.querySelectorAll('.section');
-    const mainElement             = document.querySelector('main');
+  // Sections
+  const betaSection = document.getElementById('artifacts-section');
+  const releasesSection = document.getElementById('releases-section');
+  const allSections = document.querySelectorAll('.section');
+  const mainElement = document.querySelector('main');
 
-    // Reset Button
-    const resetBtn                = document.getElementById('reset-defaults');
+  // Reset Button
+  const resetBtn = document.getElementById('reset-defaults');
 
-    // IMPORTANT: Ensure these arrays are declared globally somewhere, or right here:
-    let verJson = [];
-    let releaseJson = [];
-    let totalDownloads = 0;
+  // IMPORTANT: Ensure these arrays are declared globally somewhere, or right here:
+  let verJson = [];
+  let releaseJson = [];
+  let totalDownloads = 0;
 
-    /****************************************
-     * 2) EVENT LISTENERS
-     ****************************************/
+  /****************************************
+   * 2) EVENT LISTENERS
+   ****************************************/
 
-    // 2.1) Toggle Accessibility Menu
-    accessibilityBtn.addEventListener('click', () => {
-        toggleDisplay(accessibilityMenu);
+  // 2.1) Toggle Accessibility Menu
+  accessibilityBtn.addEventListener('click', () => {
+    toggleDisplay(accessibilityMenu);
+  });
+
+  // 2.2) Toggle Beta Section
+  toggleBetaBtn.addEventListener('click', () => {
+    toggleDisplay(betaSection);
+  });
+
+  // 2.3) Toggle Releases Section
+  toggleReleasesBtn.addEventListener('click', () => {
+    toggleDisplay(releasesSection);
+  });
+
+  // 2.4) Toggle "Adjust Section Width"
+  toggleWidthBtn.addEventListener('click', () => {
+    toggleDisplay(widthSection);
+  });
+
+  // 2.5) Toggle "Adjust Alignment"
+  toggleAlignmentBtn.addEventListener('click', () => {
+    toggleDisplay(alignmentSection);
+  });
+
+  // 2.6) Adjust Section Width
+  sectionWidthInput.addEventListener('change', () => {
+    allSections.forEach(section => {
+      section.style.width = sectionWidthInput.value;
     });
+  });
 
-    // 2.2) Toggle Beta Section
-    toggleBetaBtn.addEventListener('click', () => {
-        toggleDisplay(betaSection);
-    });
+  // 2.7) Adjust Main Alignment
+  alignmentSelect.addEventListener('change', () => {
+    mainElement.style.justifyContent = alignmentSelect.value;
+  });
 
-    // 2.3) Toggle Releases Section
-    toggleReleasesBtn.addEventListener('click', () => {
-        toggleDisplay(releasesSection);
-    });
+  // 2.8) Change Beta Header Alignment
+  betaAlignmentSelect.addEventListener('change', () => {
+    changeHeaderAlignment(betaHeader, betaAlignmentSelect.value);
+  });
 
-    // 2.4) Toggle "Adjust Section Width"
-    toggleWidthBtn.addEventListener('click', () => {
-        toggleDisplay(widthSection);
-    });
+  // 2.9) Change Releases Header Alignment
+  releasesAlignmentSelect.addEventListener('change', () => {
+    changeHeaderAlignment(releasesHeader, releasesAlignmentSelect.value);
+  });
 
-    // 2.5) Toggle "Adjust Alignment"
-    toggleAlignmentBtn.addEventListener('click', () => {
-        toggleDisplay(alignmentSection);
-    });
+  // 2.10) Reset to Defaults
+  resetBtn.addEventListener('click', () => {
+    resetToDefaults();
+  });
 
-    // 2.6) Adjust Section Width
-    sectionWidthInput.addEventListener('change', () => {
-        allSections.forEach(section => {
-            section.style.width = sectionWidthInput.value;
-        });
-    });
-
-    // 2.7) Adjust Main Alignment
-    alignmentSelect.addEventListener('change', () => {
-        mainElement.style.justifyContent = alignmentSelect.value;
-    });
-
-    // 2.8) Change Beta Header Alignment
-    betaAlignmentSelect.addEventListener('change', () => {
-        changeHeaderAlignment(betaHeader, betaAlignmentSelect.value);
-    });
-
-    // 2.9) Change Releases Header Alignment
-    releasesAlignmentSelect.addEventListener('change', () => {
-        changeHeaderAlignment(releasesHeader, releasesAlignmentSelect.value);
-    });
-
-    // 2.10) Reset to Defaults
-    resetBtn.addEventListener('click', () => {
-        resetToDefaults();
-    });
-
-    /****************************************
-     * 3) INITIAL FETCH CALLS
-     ****************************************/
-    fetchDownloadCount();
-    fetchWorkflowRuns();
-    fetchReleases();
+  /****************************************
+   * 3) INITIAL FETCH CALLS
+   ****************************************/
+  fetchDownloadCount();
+  fetchWorkflowRuns();
+  fetchReleases();
 
 
-    /************************************************
-     * 5) FETCHING + DATA HANDLING
-     ************************************************/
+  /************************************************
+   * 5) FETCHING + DATA HANDLING
+   ************************************************/
 
 
-    /**
-     * Fetch total download count from GitHub releases.
-     * This function now updates the global `totalDownloads` variable.
-     */
-    async function fetchDownloadCount() {
-        try {
-            const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-            const data = await response.json();
+  /**
+   * Fetch total download count from GitHub releases.
+   * This function now updates the global `totalDownloads` variable.
+   */
+  async function fetchDownloadCount() {
+    try {
+      const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases?per_page=100'); // Adjust per_page as needed
+      const data = await response.json();
 
-            if (data && Array.isArray(data)) {
-                totalDownloads = data.reduce((acc, release) => {
-                    if (release.assets && Array.isArray(release.assets)) {
-                        return acc + release.assets.reduce((assetAcc, asset) => assetAcc + (asset.download_count || 0), 0);
-                    }
-                    return acc;
-                }, 0);
-            } else {
-                console.error("Invalid response from GitHub Releases API:", data);
-                totalDownloads = 0; // or some default value
-            }
+      if (data && Array.isArray(data)) {
+        totalDownloads = data.reduce((acc, release) => {
+          if (release.assets && Array.isArray(release.assets)) {
+            return acc + release.assets.reduce((assetAcc, asset) => assetAcc + (asset.download_count || 0), 0);
+          }
+          return acc;
+        }, 0);
+      } else {
+        console.error("Invalid response from GitHub Releases API:", data);
+        totalDownloads = 0; // or some default value
+      }
 
 
-            updateDownloadCountDisplay(); // Update the display
-        } catch (error) {
-            console.error("Error fetching download count:", error);
-            totalDownloads = 0; // or some default value
-            updateDownloadCountDisplay();
-        }
+      updateDownloadCountDisplay(); // Update the display
+    } catch (error) {
+      console.error("Error fetching download count:", error);
+      totalDownloads = 0; // or some default value
+      updateDownloadCountDisplay();
     }
+  }
 
 
-    /**
-     * Updates the download count display on the page.
-     */
-    function updateDownloadCountDisplay() {
-        document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
-    }
+  /**
+   * Updates the download count display on the page.
+   */
+  function updateDownloadCountDisplay() {
+    document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
+  }
 
-    /**
-     * Add a Beta version to the global verJson array and refresh the Beta table.
-     */
-    function addBetaVer(sha, time, msg, artifact_id) {
-        // Make sure verJson is a global array declared above or in the HTML
-        verJson.push({
-            link: `https://github.com/SkidderMC/FDPClient/commit/${sha}`,
-            sha,
-            time: new Date(time),
-            msg,
-            download_link: `https://nightly.link/SkidderMC/FDPClient/actions/runs/${artifact_id}/FDPClient.zip`
-        });
-        refreshBeta();
-    }
+  /**
+   * Add a Beta version to the global verJson array and refresh the Beta table.
+   */
+  function addBetaVer(sha, time, msg, artifact_id) {
+    // Make sure verJson is a global array declared above or in the HTML
+    verJson.push({
+      link: `https://github.com/SkidderMC/FDPClient/commit/${sha}`,
+      sha,
+      time: new Date(time),
+      msg,
+      download_link: `https://nightly.link/SkidderMC/FDPClient/actions/runs/${artifact_id}/FDPClient.zip`
+    });
+    refreshBeta();
+  }
 
-    /**
-     * Add a Release to the global releaseJson array and refresh the Releases section.
-     */
-    function addRelease(tag_name, time, changelog_url, download_count) {
-        // Make sure releaseJson is a global array declared above or in the HTML
-        releaseJson.push({
-            tag_name,
-            time: new Date(time),
-            changelog_link: changelog_url,
-            download_count
-        });
-        refreshReleases();
-    }
+  /**
+   * Add a Release to the global releaseJson array and refresh the Releases section.
+   */
+  function addRelease(tag_name, time, changelog_url, download_count) {
+    // Make sure releaseJson is a global array declared above or in the HTML
+    releaseJson.push({
+      tag_name,
+      time: new Date(time),
+      changelog_link: changelog_url,
+      download_count
+    });
+    refreshReleases();
+  }
 
-    /**
-     * Refresh the Beta table (show the latest 30 versions).
-     */
-    function refreshBeta() {
-        // Using jQuery for simplicity
-        $('#loading-badge').html('');
-        $('#tbody').html('');
+  /**
+   * Refresh the Beta table (show the latest 30 versions).
+   */
+  function refreshBeta() {
+    // Using jQuery for simplicity
+    $('#loading-badge').html('');
+    $('#tbody').html('');
 
-        verJson
-            .sort((a, b) => b.time.getTime() - a.time.getTime())
-            .slice(0, 30)
-            .forEach(element => {
-                $('#tbody').append(`
+    verJson
+        .sort((a, b) => b.time.getTime() - a.time.getTime())
+        .slice(0, 30)
+        .forEach(element => {
+          $('#tbody').append(`
                     <tr>
                         <td>
                             <a href="${element.link}" style="color:#FFFFFF">
@@ -457,151 +457,195 @@ document.addEventListener('DOMContentLoaded', () => {
                         </td>
                         <td>${element.time.toLocaleString()}</td>
                         <td>
-                            <a href="${element.download_link}" style="color:#7289da">
+                            <a href="${element.download_link}" style="color:#7289da" onclick="incrementDownloadCount('${element.download_link}')">
                                 Download
                             </a>
                         </td>
                         <td>${element.msg}</td>
                     </tr>
                 `);
-            });
-    }
+        });
+  }
 
-    /**
-     * Refresh the Releases section.
-     */
-    function refreshReleases() {
-        // Using jQuery for simplicity
-        $('#releases-tbody').html('');
+  /**
+   * Refresh the Releases section.
+   */
+  function refreshReleases() {
+    // Using jQuery for simplicity
+    $('#releases-tbody').html('');
 
-        releaseJson
-            .sort((a, b) => b.time.getTime() - a.time.getTime())
-            .forEach(element => {
-                $('#releases-tbody').append(`
+    releaseJson
+        .sort((a, b) => b.time.getTime() - a.time.getTime())
+        .forEach(element => {
+          $('#releases-tbody').append(`
                     <div class="release-info">
                         <strong>${element.tag_name}</strong> (${element.time.toLocaleDateString()})<br>
                         <a href="${element.changelog_link}" target="_blank">View Release</a><br>
                         <span>Download Count: ${element.download_count}</span>
+                        <a href="#" onclick="incrementDownloadCount('${element.changelog_link}')">Download</a>
                     </div>
                 `);
-            });
-    }
-
-    /**
-     * Fetch GitHub workflow runs (Beta builds) and add them to the Beta table.
-     */
-    async function fetchWorkflowRuns() {
-        let page = 1;
-        let hasMorePages = true;
-
-        while (hasMorePages) {
-            const response = await fetch(
-                `https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`
-            );
-            const data = await response.json();
-
-            if (data.workflow_runs.length > 0) {
-                data.workflow_runs.forEach(run => {
-                    addBetaVer(
-                        run.head_commit.id,
-                        run.head_commit.timestamp,
-                        run.head_commit.message,
-                        run.id
-                    );
-                });
-                page++;
-            } else {
-                hasMorePages = false;
-            }
-        }
-    }
-
-
-    /**
-     * Fetch all Releases from GitHub and add them to the releaseJson array.
-     * After fetching releases, it updates the total download count and refreshes the display.
-     */
-    async function fetchReleases() {
-        try {
-            const response = await fetch('https://api.github.com/repos/SkidderMC/FDPClient/releases');
-            const data = await response.json();
-
-            if (data && Array.isArray(data)) {
-                releaseJson = []; // Clear existing releases before adding new ones
-
-                data.forEach(release => {
-                    const downloadCount = release.assets.reduce((total, asset) => total + (asset.download_count || 0), 0);
-                    addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
-                });
-
-                // Recalculate total downloads after adding all releases
-                totalDownloads = data.reduce((acc, release) => {
-                    if (release.assets && Array.isArray(release.assets)) {
-                        return acc + release.assets.reduce((assetAcc, asset) => assetAcc + (asset.download_count || 0), 0);
-                    }
-                    return acc;
-                }, 0);
-
-                updateDownloadCountDisplay();  // Update the display after fetching releases
-
-            } else {
-                console.error("Invalid response from GitHub Releases API:", data);
-            }
-
-        } catch (error) {
-            console.error("Error fetching releases:", error);
-        }
-    }
-
-
-    /****************************************
-     * 4) HELPER FUNCTIONS
-     ****************************************/
-
-    /**
-     * Toggles an element between 'none' and 'block'.
-     */
-    function toggleDisplay(element) {
-        element.style.display =
-            (element.style.display === 'none' || !element.style.display)
-                ? 'block'
-                : 'none';
-    }
-
-    /**
-     * Changes the text alignment of a given header element.
-     */
-    function changeHeaderAlignment(header, alignment) {
-        header.style.textAlign = alignment;
-    }
-
-    /**
-     * Resets all settings to their default values.
-     */
-    function resetToDefaults() {
-        // 1) Reset Section Width (~50%)
-        allSections.forEach(section => {
-            section.style.width = '48%';
         });
-        sectionWidthInput.value = '50%';
+  }
 
-        // 2) Reset Main Alignment
-        mainElement.style.justifyContent = 'space-between';
-        alignmentSelect.value = 'center';
+  /**
+   * Fetch GitHub workflow runs (Beta builds) and add them to the Beta table.
+   */
+  async function fetchWorkflowRuns() {
+    let page = 1;
+    let hasMorePages = true;
 
-        // 3) Reset Beta & Releases headers alignment
-        betaAlignmentSelect.value = 'left';
-        betaHeader.style.textAlign = 'left';
+    while (hasMorePages) {
+      const response = await fetch(
+          `https://api.github.com/repos/SkidderMC/FDPClient/actions/runs?per_page=100&page=${page}`
+      );
+      const data = await response.json();
 
-        releasesAlignmentSelect.value = 'center';
-        releasesHeader.style.textAlign = 'center';
-
-        // 4) Make Beta & Releases sections visible again
-        betaSection.style.display = 'block';
-        releasesSection.style.display = 'block';
-
-        // 5) (Optional) Hide sub-sections if desired:
-        // widthSection.style.display = 'none';
-        // alignmentSection.style.display = 'none';
+      if (data.workflow_runs.length > 0) {
+        data.workflow_runs.forEach(run => {
+          addBetaVer(
+              run.head_commit.id,
+              run.head_commit.timestamp,
+              run.head_commit.message,
+              run.id
+          );
+        });
+        page++;
+      } else {
+        hasMorePages = false;
+      }
     }
+  }
+
+
+  /**
+   * Fetch all Releases from GitHub and add them to the releaseJson array.
+   * After fetching releases, it updates the total download count and refreshes the display.
+   */
+  async function fetchReleases() {
+    try {
+      // Fetch releases per page to handle more than 30 releases
+      let page = 1;
+      let allReleases = [];
+      while (true) {
+        const response = await fetch(`https://api.github.com/repos/SkidderMC/FDPClient/releases?per_page=100&page=${page}`);
+        const data = await response.json();
+
+        if (!data || !Array.isArray(data) || data.length === 0) {
+          break; // No more releases
+        }
+
+        allReleases = allReleases.concat(data);
+        page++;
+      }
+
+
+      if (allReleases.length > 0) {
+        releaseJson = []; // Clear existing releases before adding new ones
+
+        allReleases.forEach(release => {
+          const downloadCount = release.assets.reduce((total, asset) => total + (asset.download_count || 0), 0);
+          addRelease(release.tag_name, release.published_at, release.html_url, downloadCount);
+        });
+
+        // Recalculate total downloads after adding all releases
+        totalDownloads = allReleases.reduce((acc, release) => {
+          if (release.assets && Array.isArray(release.assets)) {
+            return acc + release.assets.reduce((assetAcc, asset) => assetAcc + (asset.download_count || 0), 0);
+          }
+          return acc;
+        }, 0);
+
+        updateDownloadCountDisplay();  // Update the display after fetching releases
+
+      } else {
+        console.error("No releases found or invalid response from GitHub Releases API");
+      }
+
+    } catch (error) {
+      console.error("Error fetching releases:", error);
+    }
+  }
+
+
+  /****************************************
+   * 4) HELPER FUNCTIONS
+   ****************************************/
+
+  /**
+   * Toggles an element between 'none' and 'block'.
+   */
+  function toggleDisplay(element) {
+    element.style.display =
+        (element.style.display === 'none' || !element.style.display)
+            ? 'block'
+            : 'none';
+  }
+
+  /**
+   * Changes the text alignment of a given header element.
+   */
+  function changeHeaderAlignment(header, alignment) {
+    header.style.textAlign = alignment;
+  }
+
+  /**
+   * Resets all settings to their default values.
+   */
+  function resetToDefaults() {
+    // 1) Reset Section Width (~50%)
+    allSections.forEach(section => {
+      section.style.width = '48%';
+    });
+    sectionWidthInput.value = '50%';
+
+    // 2) Reset Main Alignment
+    mainElement.style.justifyContent = 'space-between';
+    alignmentSelect.value = 'center';
+
+    // 3) Reset Beta & Releases headers alignment
+    betaAlignmentSelect.value = 'left';
+    betaHeader.style.textAlign = 'left';
+
+    releasesAlignmentSelect.value = 'center';
+    releasesHeader.style.textAlign = 'center';
+
+    // 4) Make Beta & Releases sections visible again
+    betaSection.style.display = 'block';
+    releasesSection.style.display = 'block';
+
+    // 5) (Optional) Hide sub-sections if desired:
+    // widthSection.style.display = 'none';
+    // alignmentSection.style.display = 'none';
+  }
+
+  /**
+   * Function to manually increment the download count.
+   */
+  window.incrementDownloadCount = async (downloadLink) => {
+    totalDownloads++;
+    updateDownloadCountDisplay();
+
+    // Optionally, you can send a request to your server to log the download.
+    // This is crucial if you want the count to persist across sessions and page reloads.
+    // Example:
+    try {
+      const response = await fetch('/log-download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ downloadLink: downloadLink })
+      });
+
+      if (!response.ok) {
+        console.error('Failed to log download:', response.status);
+      }
+    } catch (error) {
+      console.error('Error logging download:', error);
+    }
+
+    // Redirect to the download link after incrementing the count
+    window.location.href = downloadLink;
+  };
 });
