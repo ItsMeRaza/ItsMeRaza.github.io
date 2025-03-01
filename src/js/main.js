@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * Updates the download count display on the page.
    */
   function updateDownloadCountDisplay() {
-    document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 100k+ Downloads!)`;
+    document.getElementById('download-count').innerText = `GitHub Downloads: ${totalDownloads} (Thanks for 200k+ Downloads!)`;
   }
 
   /**
