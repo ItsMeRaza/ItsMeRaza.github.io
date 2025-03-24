@@ -1,5 +1,5 @@
 {
-  "name": "fdpinfo.github.io",
+  "name": "ItsMeRaza.github.io",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FdpInfo/FdpInfo.github.io.git"
+    "url": "https://github.com/ItsMeRaza/ItsMeRaza.github.io.git"
   },
   "private": true,
   "dependencies": {
